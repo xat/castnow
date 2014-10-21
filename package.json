@@ -1,6 +1,6 @@
 {
   "name": "castnow",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "commandline chromecast player",
   "main": "index.js",
   "bin": {
@@ -34,7 +34,6 @@
     "internal-ip": "^1.0.0",
     "keypress": "^0.2.1",
     "minimist": "^1.1.0",
-    "peercast": "^1.1.2",
     "peerflix": "^0.19.1",
     "read-torrent": "^1.0.0",
     "single-line-log": "^0.4.1"

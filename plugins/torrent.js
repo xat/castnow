@@ -7,7 +7,7 @@ var torrent = function(ctx, next) {
 
   if (!/^magnet:/.test(ctx.options.path) &&
       !/torrent$/.test(ctx.options.path) &&
-      !ctx.options.torrent) next();
+      !ctx.options.torrent) return next();
 
   readTorrent(ctx.options.path, function(err, torrent) {
     if (err) return next();
