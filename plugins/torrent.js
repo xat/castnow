@@ -3,7 +3,12 @@ var peerflix = require('peerflix');
 var internalIp = require('internal-ip');
 
 var torrent = function(ctx, next) {
-  if (ctx.mode === 'attach' || !ctx.options.torrent) return next();
+  if (ctx.mode === 'attach') return next();
+
+  if (!/^magnet:/.test(ctx.options.path) &&
+      !/torrent$/.test(ctx.options.path) &&
+      !ctx.options.torrent) next();
+
   readTorrent(ctx.options.path, function(err, torrent) {
     if (err) return next();
     var engine = peerflix(torrent);
