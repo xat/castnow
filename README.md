@@ -2,10 +2,10 @@
 
 castnow is commandline utility which can be used to playback media files on
 your chromecast device. It supports playback of local video files, youtube
-clips, videos on the web and torrents.
-You can toggle beween play and pause with the space-key.
+clips, videos on the web and torrents. You can also re-attach a running
+playback session.
 
-### Usage
+### usage
 
 ```
 
@@ -19,12 +19,24 @@ castnow http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4
 castnow https://www.youtube.com/watch?v=pcVRrlmpcWk
 
 // start playback of some video over torrent
-castnow <url-to-torrent-file OR magnet> --torrent
+castnow <url-to-torrent-file OR magnet>
 
 // re-attach to an currently running playback session
 castnow
 
 ```
+
+### player controls
+
+```
+
+space   // toggle between play and pause
+m       // toggle between mute and unmute
+up      // volume up
+down    // volume down
+
+```
+
 
 ### Installation
 

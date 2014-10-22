@@ -6,7 +6,7 @@ var chalk = require('chalk');
 var keypress = require('keypress');
 var log = require('single-line-log').stdout;
 
-// Plugins
+// plugins
 var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
 var youtube = require('./plugins/youtube');
@@ -18,6 +18,8 @@ if (opts._.length) {
 delete opts._;
 
 var ctrl = function(err, p, ctx) {
+  var volume;
+
   if (err) {
     console.log(chalk.red(err));
     process.exit();
@@ -27,23 +29,65 @@ var ctrl = function(err, p, ctx) {
   process.stdin.setRawMode(true);
   process.stdin.resume();
 
-  var isPlaying = function() {
-    return p.currentSession.playerState === 'PLAYING';
-  };
+  // get initial volume
+  p.getVolume(function(err, status) {
+    volume = status;
+  });
 
-  process.stdin.on('keypress', function(ch, key) {
-    if (key.name === 'space') {
-      if (isPlaying()) {
-        p.pause();
+  var keyMappings = {
+
+    // toggle between play / pause
+    space: function() {
+      if (p.currentSession.playerState === 'PLAYING') {
+        p.pause()
       } else {
         p.play();
       }
+    },
+
+    // toggle between mute / unmute
+    m: function() {
+      if (volume.muted) {
+        p.unmute(function(err, status) {
+          if (err) return;
+          volume = status.status.volume;
+        });
+      } else {
+        p.mute(function(err, status) {
+          if (err) return;
+          volume = status.status.volume;
+        });
+      }
+    },
+
+    // volume up
+    up: function() {
+      if (volume.level >= 1) return;
+      p.setVolume(Math.min(volume.level + 0.05, 1), function(err, status) {
+        if (err) return;
+        volume = status;
+      });
+    },
+
+    // volume down
+    down: function() {
+      if (volume.level <= 0) return;
+      p.setVolume(Math.max(volume.level - 0.05, 0), function(err, status) {
+        if (err) return;
+        volume = status;
+      });
+    }
+
+  };
+
+  process.stdin.on('keypress', function(ch, key) {
+    if (key && key.name && keyMappings[key.name]) {
+      keyMappings[key.name]();
     }
     if (key && key.ctrl && key.name == 'c') {
       process.exit();
     }
   });
-
 };
 
 var circulate = function(arr) {
