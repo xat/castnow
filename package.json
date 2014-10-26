@@ -1,6 +1,6 @@
 {
   "name": "castnow",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "commandline chromecast player",
   "main": "index.js",
   "bin": {
@@ -28,7 +28,7 @@
   "dependencies": {
     "castv2-client": "0.0.7",
     "chalk": "^0.5.1",
-    "chromecast-player": "0.1.2",
+    "chromecast-player": "0.1.3",
     "get-port": "^1.0.0",
     "get-youtube-id": "^0.1.3",
     "internal-ip": "^1.0.0",
