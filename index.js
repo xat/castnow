@@ -5,6 +5,7 @@ var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
 var keypress = require('keypress');
 var log = require('single-line-log').stdout;
+var ui = require('playerui')();
 
 // plugins
 var localfile = require('./plugins/localfile');
@@ -16,6 +17,8 @@ if (opts._.length) {
 }
 
 delete opts._;
+
+ui.showLabels('state');
 
 var ctrl = function(err, p, ctx) {
   var volume;
@@ -33,6 +36,31 @@ var ctrl = function(err, p, ctx) {
   p.getVolume(function(err, status) {
     volume = status;
   });
+
+  p.on('position', function(pos) {
+    ui.setProgress(pos.percent);
+    ui.render();
+  });
+
+  var updateTitle = function() {
+    p.getStatus(function(err, status) {
+      if (!status.media || !status.media.metadata
+          || !status.media.metadata.title) return;
+      var metadata = status.media.metadata;
+      var title;
+      if (metadata.artist) {
+        title = metadata.artist + ' - ' + metadata.title;
+      } else {
+        title = metadata.title;
+      }
+      ui.setLabel('source', 'Source', title);
+      ui.showLabels('state', 'source');
+      ui.render();
+    });
+  };
+
+  p.on('playing', updateTitle);
+  updateTitle();
 
   var keyMappings = {
 
@@ -103,7 +131,8 @@ var logState = (function() {
   return function(status) {
     if (inter) clearInterval(inter);
     inter = setInterval(function() {
-      log(chalk.grey('player status: ') + chalk.green(status + dots()) + "\n");
+      ui.setLabel('state', 'State', status + dots());
+      ui.render();
     }, 300);
   };
 })();

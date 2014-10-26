@@ -14,6 +14,11 @@ var torrent = function(ctx, next) {
     var engine = peerflix(torrent);
     engine.server.once('listening', function() {
       ctx.options.path = 'http://'+internalIp()+':'+engine.server.address().port;
+      ctx.options.media = {
+        metadata: {
+          title: engine.server.index.name
+        }
+      };
       ctx.options.type = 'video/mp4';
       next();
     });
