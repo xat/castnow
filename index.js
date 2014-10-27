@@ -125,13 +125,17 @@ var circulate = function(arr) {
   }
 };
 
+var capitalize = function(str) {
+  return str.substr(0, 1).toUpperCase() + str.substr(1);
+};
+
 var logState = (function() {
   var inter;
   var dots = circulate(['.', '..', '...', '....']);
   return function(status) {
     if (inter) clearInterval(inter);
     inter = setInterval(function() {
-      ui.setLabel('state', 'State', status + dots());
+      ui.setLabel('state', 'State', capitalize(status) + dots());
       ui.render();
     }, 300);
   };
