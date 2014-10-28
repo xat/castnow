@@ -78,12 +78,12 @@ var ctrl = function(err, p, ctx) {
       if (volume.muted) {
         p.unmute(function(err, status) {
           if (err) return;
-          volume = status.status.volume;
+          volume = status;
         });
       } else {
         p.mute(function(err, status) {
           if (err) return;
-          volume = status.status.volume;
+          volume = status;
         });
       }
     },
