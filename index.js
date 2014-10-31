@@ -11,6 +11,7 @@ var ui = require('playerui')();
 var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
 var youtube = require('./plugins/youtube');
+var transcode = require('./plugins/transcode');
 
 if (opts._.length) {
   opts.path = opts._[0];
@@ -149,6 +150,7 @@ player.use(function(ctx, next) {
 player.use(torrent);
 player.use(localfile);
 player.use(youtube);
+player.use(transcode);
 
 if (!opts.path) {
   player.attach(opts, ctrl);

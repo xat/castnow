@@ -31,12 +31,14 @@
     "chromecast-player": "0.1.5",
     "get-port": "^1.0.0",
     "get-youtube-id": "^0.1.3",
+    "got": "^1.2.2",
     "internal-ip": "^1.0.0",
     "keypress": "^0.2.1",
     "minimist": "^1.1.0",
     "peerflix": "^0.19.1",
-    "playerui": "^1.0.0",
+    "playerui": "^1.0.1",
     "read-torrent": "^1.0.0",
-    "single-line-log": "^0.4.1"
+    "single-line-log": "^0.4.1",
+    "stream-transcoder": "0.0.5"
   }
 }
