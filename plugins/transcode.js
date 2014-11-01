@@ -16,6 +16,7 @@ var transcode = function(ctx, next) {
       new Transcoder(got(orgPath))
         .videoCodec('h264')
         .format('mp4')
+        .custom('strict', 'experimental')
         .stream()
         .pipe(res);
     }).listen(port);
