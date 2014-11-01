@@ -6,6 +6,7 @@ var chalk = require('chalk');
 var keypress = require('keypress');
 var log = require('single-line-log').stdout;
 var ui = require('playerui')();
+var circulate = require('array-loop');
 
 // plugins
 var localfile = require('./plugins/localfile');
@@ -119,13 +120,6 @@ var ctrl = function(err, p, ctx) {
       process.exit();
     }
   });
-};
-
-var circulate = function(arr) {
-  var len = arr.length, pos = -1;
-  return !len ? void 0 : function() {
-    return arr[pos = ++pos % len];
-  }
 };
 
 var capitalize = function(str) {
