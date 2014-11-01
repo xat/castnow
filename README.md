@@ -21,6 +21,9 @@ castnow https://www.youtube.com/watch?v=pcVRrlmpcWk
 // start playback of some video over torrent
 castnow <url-to-torrent-file OR magnet>
 
+// transcode some other videoformat to mp4 while playback (requires ffmpeg)
+castnow ./myvideo.avi --tomp4
+
 // re-attach to an currently running playback session
 castnow
 
