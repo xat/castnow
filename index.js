@@ -38,10 +38,12 @@ var ctrl = function(err, p, ctx) {
     volume = status;
   });
 
-  p.on('position', function(pos) {
-    ui.setProgress(pos.percent);
-    ui.render();
-  });
+  if (!ctx.options.disableTimeline) {
+    p.on('position', function(pos) {
+      ui.setProgress(pos.percent);
+      ui.render();
+    });
+  }
 
   var updateTitle = function() {
     p.getStatus(function(err, status) {
@@ -68,8 +70,8 @@ var ctrl = function(err, p, ctx) {
     // toggle between play / pause
     space: function() {
       if (p.currentSession.playerState === 'PLAYING') {
-        p.pause()
-      } else {
+        p.pause();
+      } else if (p.currentSession.playerState === 'PAUSED') {
         p.play();
       }
     },
