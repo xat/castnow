@@ -152,6 +152,11 @@ player.use(localfile);
 player.use(youtube);
 player.use(transcode);
 
+player.use(function(ctx, next) {
+  if (!ctx.options.type) ctx.options.type = 'video/mp4';
+  next();
+});
+
 if (!opts.path) {
   player.attach(opts, ctrl);
 } else {
