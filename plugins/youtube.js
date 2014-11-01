@@ -27,7 +27,7 @@ Yt.prototype.load = function(opts, cb) {
 };
 
 var youtube = function(ctx, next) {
-  if (ctx.mode === 'attach') return next();
+  if (ctx.mode !== 'launch') return next();
   var id = getYouTubeId(ctx.options.path);
   if (!id) return next();
   ctx.api = Yt;

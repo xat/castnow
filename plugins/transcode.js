@@ -5,13 +5,13 @@ var got = require('got');
 var Transcoder = require('stream-transcoder');
 
 var transcode = function(ctx, next) {
-  if (ctx.mode === 'attach') return next();
-  if (!ctx.options.tomp4) return next();
+  if (ctx.mode !== 'launch' || !ctx.options.tomp4) return next();
   var orgPath = ctx.options.path;
 
   getPort(function(err, port) {
     ctx.options.path = 'http://' + internalIp() + ':' + port;
     ctx.options.type = 'video/mp4';
+    ctx.options.disableTimeline = true;
     http.createServer(function(req, res) {
       new Transcoder(got(orgPath))
         .videoCodec('h264')

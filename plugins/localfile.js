@@ -9,7 +9,7 @@ var isFile = function(path) {
 };
 
 var localfile = function(ctx, next) {
-  if (ctx.mode === 'attach') return next();
+  if (ctx.mode !== 'launch') return next();
   if (!isFile(ctx.options.path)) return next();
   var filePath = ctx.options.path;
 
