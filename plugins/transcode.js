@@ -1,8 +1,6 @@
 var http = require('http');
 var getPort = require('get-port');
 var internalIp = require('internal-ip');
-var fs = require('fs');
-var path = require('path');
 var got = require('got');
 var Transcoder = require('stream-transcoder');
 
