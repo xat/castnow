@@ -3,11 +3,16 @@ var fs = require('fs')
 var getPort = require('get-port');
 var srt2vtt = require('srt2vtt');
 var internalIp = require('internal-ip');
+var extname = require('path').extname;
 
-var srtToVtt = function(sourceFile, destFile) {
+var srtToVtt = function(sourceFile, cb) {
   var srtFileContent = fs.readFileSync(sourceFile);
+  if (extname(sourceFile).toLowerCase() !== '.srt') {
+    return cb(null, srtFileContent);
+  }
   srt2vtt(srtFileContent, function(err, data) {
-    fs.writeFileSync(destFile, data);
+    if (err) return cb(err);
+    cb(null, data);
   });
 };
 
@@ -51,23 +56,18 @@ var subtitles = function(ctx, next) {
     return next();
   }
 
-  var newpath = path + '.vtt';
-  srtToVtt(path, newpath);
-  path = newpath;
-
-  fs.readFile(path, 'binary', function(err, file) {
+  srtToVtt(path, function(err, data) {
+    if (err) return next();
     getPort(function(err, port) {
       if (err) return next();
       var addr = 'http://' + internalIp() + ':' + port;
-
       http.createServer(function(req, res) {
         res.writeHead(200, {
           'Access-Control-Allow-Origin': '*',
-          'Content-Length': file.length,
+          'Content-Length': data.length,
           'Content-type': 'text/vtt;charset=utf-8'
         });
-
-        res.end(file);
+        res.end(data);
       }).listen(port);
 
       ctx.options.subtitles = addr;
@@ -75,7 +75,6 @@ var subtitles = function(ctx, next) {
       next();
     });
   });
-
 }
 
 module.exports = subtitles;
