@@ -21,6 +21,9 @@ castnow https://www.youtube.com/watch?v=pcVRrlmpcWk
 // start playback of some video over torrent
 castnow <url-to-torrent-file OR magnet>
 
+// start playback of some video over torrent, with local subtitles
+castnow <url-to-torrent-file OR magnet> </local/path/to/subtitles.srt>
+
 // transcode some other videoformat to mp4 while playback (requires ffmpeg)
 castnow ./myvideo.avi --tomp4
 
