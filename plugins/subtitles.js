@@ -3,17 +3,22 @@ var fs = require('fs')
 var getPort = require('get-port');
 var srt2vtt = require('srt2vtt');
 var internalIp = require('internal-ip');
-var extname = require('path').extname;
+var got = require('got');
 
-var srtToVtt = function(sourceFile, cb) {
-  var srtFileContent = fs.readFileSync(sourceFile);
-  if (extname(sourceFile).toLowerCase() !== '.srt') {
-    return cb(null, srtFileContent);
-  }
-  srt2vtt(srtFileContent, function(err, data) {
+var srtToVtt = function(source, cb) {
+  var handler = fs.existsSync(source) ? fs.readFile : got;
+  handler(source, function(err, content) {
     if (err) return cb(err);
-    cb(null, data);
+    if (!isSrt(source)) return cb(null, content);
+    srt2vtt(content, function(err, data) {
+      if (err) return cb(err);
+      cb(null, data);
+    });
   });
+};
+
+var isSrt = function(path) {
+  return path.substr(-4).toLowerCase() === '.srt';
 };
 
 var attachSubtitles = function(ctx) {
@@ -41,16 +46,7 @@ var subtitles = function(ctx, next) {
   if (!ctx.options.subtitles) return next();
   if (!ctx.options.media) ctx.options.media = {};
 
-  var path = ctx.options.subtitles;
-
-  if (!(fs.existsSync(path))) {
-    // assume it's a HTTP URL.
-    // Maybe we need to explicity check?
-    attachSubtitles(ctx);
-    return next();
-  }
-
-  srtToVtt(path, function(err, data) {
+  srtToVtt(ctx.options.subtitles, function(err, data) {
     if (err) return next();
     getPort(function(err, port) {
       if (err) return next();
@@ -68,6 +64,6 @@ var subtitles = function(ctx, next) {
       next();
     });
   });
-}
+};
 
 module.exports = subtitles;

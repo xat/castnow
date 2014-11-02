@@ -42,6 +42,9 @@ not supported in transcode mode.
 use the `--device` option to specify the device on which you want to start casting.
 Otherwise castnow will just use the first device it finds in the network.
 
+* `--subtitles <path/URL>` This can be a path or URL to a vtt or srt file which
+contains subtitles.
+
 ### player controls
 
 ```
