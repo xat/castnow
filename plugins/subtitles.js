@@ -5,28 +5,29 @@ var srt2vtt = require('srt2vtt');
 var internalIp = require('internal-ip');
 
 var srtToVtt = function(sourceFile, destFile) {
-    var srtFileContent = fs.readFileSync(sourceFile);
-    srt2vtt(srtFileContent, function(err, data) {
-	if (err) {}
-	fs.writeFileSync(destFile, data);
-    });
-}
+  var srtFileContent = fs.readFileSync(sourceFile);
+  srt2vtt(srtFileContent, function(err, data) {
+    fs.writeFileSync(destFile, data);
+  });
+};
 
-var attachSubtitles = function(ctx, address) {
-    ctx.options.media.tracks = [{
-    	trackId: 1,
-    	type: 'TEXT',
-    	trackContentId: address,
-    	trackContentType: 'text/vtt',
-    	name: 'English',
-    	language: 'en-US',
-    	subtype: 'SUBTITLES'
-    }];
-    ctx.options.media.textTrackStyle = {
-	backgroundColor: '#FFFFFF00',
-    };
+var attachSubtitles = function(ctx) {
 
-    ctx.options.activeTrackIds = [1];
+  ctx.options.media.tracks = [{
+    trackId: 1,
+    type: 'TEXT',
+    trackContentId: ctx.options.subtitles,
+    trackContentType: 'text/vtt',
+    name: 'English',
+    language: 'en-US',
+    subtype: 'SUBTITLES'
+  }];
+
+  ctx.options.media.textTrackStyle = {
+    backgroundColor: '#FFFFFF00'
+  };
+
+  ctx.options.activeTrackIds = [1];
 }
 
 /*
@@ -37,38 +38,44 @@ var attachSubtitles = function(ctx, address) {
 **  - If they are stored remotely they are read remotely.
 **  - If they are stored locally we need to convert and serve them via http.
 */
-var subtitles = function(ctx) {
-    if (!ctx.options.subtitles) return;
-    if (!ctx.options.media) return;
+var subtitles = function(ctx, next) {
+  if (!ctx.options.subtitles) return next();
+  if (!ctx.options.media) ctx.options.media = {};
 
-    var path = ctx.options.subtitles;
+  var path = ctx.options.subtitles;
 
-    if (!(fs.existsSync(path))) {
-	attachSubtitles(path);
-    }
-    else {
-	newpath = path + ".vtt";
-	srtToVtt(path, newpath);
-	path = newpath;
+  if (!(fs.existsSync(path))) {
+    // assume it's a HTTP URL.
+    // Maybe we need to explicity check?
+    attachSubtitles(ctx);
+    return next();
+  }
 
-	fs.readFile(path, "binary", function(err, file) {
-    	    getPort(function(err, port) {
-    		if (err) {}
-		var addr =  'http://' + internalIp() + ':' + port;
+  var newpath = path + '.vtt';
+  srtToVtt(path, newpath);
+  path = newpath;
 
-    		http.createServer(function(req, res) {
-		    res.writeHead(200, {
-			'Access-Control-Allow-Origin': '*',
-			'Content-Length': file.length,
-			'Content-type': 'text/vtt;charset=utf-8'
-		    });
-    		    res.write(file);
-    		}).listen(port);
+  fs.readFile(path, 'binary', function(err, file) {
+    getPort(function(err, port) {
+      if (err) return next();
+      var addr = 'http://' + internalIp() + ':' + port;
 
-		attachSubtitles(ctx, addr);
-    	    });
-	});
-    }
+      http.createServer(function(req, res) {
+        res.writeHead(200, {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Length': file.length,
+          'Content-type': 'text/vtt;charset=utf-8'
+        });
+
+        res.end(file);
+      }).listen(port);
+
+      ctx.options.subtitles = addr;
+      attachSubtitles(ctx);
+      next();
+    });
+  });
+
 }
 
 module.exports = subtitles;

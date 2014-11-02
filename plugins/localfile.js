@@ -21,6 +21,7 @@ var localfile = function(ctx, next) {
         title: path.basename(filePath)
       }
     };
+
     http.createServer(function(req, res) {
       fs.createReadStream(filePath).pipe(res);
     }).listen(port);

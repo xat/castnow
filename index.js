@@ -13,10 +13,10 @@ var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
 var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
+var subtitles = require('./plugins/subtitles');
 
 if (opts._.length) {
   opts.path = opts._[0];
-  opts.subtitles = opts._[1];
 }
 
 delete opts._;
@@ -148,6 +148,7 @@ player.use(torrent);
 player.use(localfile);
 player.use(youtube);
 player.use(transcode);
+player.use(subtitles);
 
 player.use(function(ctx, next) {
   if (!ctx.options.type) ctx.options.type = 'video/mp4';
