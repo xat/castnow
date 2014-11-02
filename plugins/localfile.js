@@ -21,8 +21,10 @@ var localfile = function(ctx, next) {
         title: path.basename(filePath)
       }
     };
-
     http.createServer(function(req, res) {
+      res.writeHead(200, {
+        'Access-Control-Allow-Origin': '*'
+      });
       fs.createReadStream(filePath).pipe(res);
     }).listen(port);
     next();

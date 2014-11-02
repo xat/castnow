@@ -13,6 +13,9 @@ var transcode = function(ctx, next) {
     ctx.options.type = 'video/mp4';
     ctx.options.disableTimeline = true;
     http.createServer(function(req, res) {
+      res.writeHead(200, {
+        'Access-Control-Allow-Origin': '*'
+      });
       new Transcoder(got(orgPath))
         .videoCodec('h264')
         .format('mp4')
