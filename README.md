@@ -27,6 +27,8 @@ castnow ./myvideo.avi --tomp4
 // re-attach to an currently running playback session
 castnow
 
+```
+
 ### options
 
 * `--tomp4` Transcode a video file to mp4 while playback. This option requires
