@@ -61,6 +61,10 @@ down    // volume down
 
 `npm install castnow -g`
 
+### Contributers
+
+* [tooryx](https://github.com/tooryx)
+
 ## License
 Copyright (c) 2014 Simon Kusterer
 Licensed under the MIT license.
