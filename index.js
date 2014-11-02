@@ -16,6 +16,7 @@ var transcode = require('./plugins/transcode');
 
 if (opts._.length) {
   opts.path = opts._[0];
+  opts.subtitles = opts._[1];
 }
 
 delete opts._;
