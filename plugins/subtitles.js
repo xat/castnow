@@ -17,7 +17,6 @@ var srtToVtt = function(sourceFile, cb) {
 };
 
 var attachSubtitles = function(ctx) {
-
   ctx.options.media.tracks = [{
     trackId: 1,
     type: 'TEXT',
@@ -27,11 +26,6 @@ var attachSubtitles = function(ctx) {
     language: 'en-US',
     subtype: 'SUBTITLES'
   }];
-
-  ctx.options.media.textTrackStyle = {
-    backgroundColor: '#FFFFFF00'
-  };
-
   ctx.options.activeTrackIds = [1];
 }
 
@@ -69,7 +63,6 @@ var subtitles = function(ctx, next) {
         });
         res.end(data);
       }).listen(port);
-
       ctx.options.subtitles = addr;
       attachSubtitles(ctx);
       next();
