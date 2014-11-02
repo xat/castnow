@@ -39,7 +39,6 @@ var attachSubtitles = function(ctx) {
 **  - Is there subtitles in the command line ?
 **  - Is there a media defined ?
 **  - Are those subtitles stored locally (.srt) or on a distant server (.vtt) ?
-**  - If they are stored remotely they are read remotely.
 **  - If they are stored locally we need to convert and serve them via http.
 */
 var subtitles = function(ctx, next) {
