@@ -12,6 +12,9 @@ playback session.
 // start playback of a local video file
 castnow ./myvideo.mp4
 
+// start playback of video files in the local directory
+castnow ./mydirectory/
+
 // start playback of some mp4 file over the web
 castnow http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4
 
