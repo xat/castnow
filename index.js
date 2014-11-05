@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var path = require('path');
 var player = require('chromecast-player')();
 var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
@@ -22,6 +23,8 @@ if (opts._.length) {
 delete opts._;
 
 ui.showLabels('state');
+
+var localStash = [];
 
 var ctrl = function(err, p, ctx) {
   var volume;
@@ -140,7 +143,25 @@ var logState = (function() {
 })();
 
 player.use(function(ctx, next) {
-  ctx.on('status', logState)
+
+  ctx.on('status', function(status) {
+
+    if (ctx.options.localPlaylist) {
+      localStash = ctx.options.localPlaylist;
+      delete ctx.options.localPlaylist;
+    }
+
+    if (status === 'idle' && localStash.length) {
+      var media = localStash.shift();
+      ui.setLabel('source', 'Source', path.basename(media));
+      ui.showLabels('state', 'source');
+      ui.render();
+      player.launch({ path: media }, ctrl);
+    }
+
+    logState(status);
+
+  });
   next();
 });
 
