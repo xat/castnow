@@ -30,7 +30,7 @@
     "array-loop": "^1.0.0",
     "castv2-client": "0.0.8",
     "chalk": "^0.5.1",
-    "chromecast-player": "0.1.5",
+    "chromecast-player": "0.1.6",
     "get-port": "^1.0.0",
     "get-youtube-id": "^0.1.3",
     "got": "^1.2.2",
