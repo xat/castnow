@@ -1,47 +1,52 @@
 var http = require('http');
 var getPort = require('get-port');
 var internalIp = require('internal-ip');
-var fs = require('fs-extended');
+var router = require('router');
 var path = require('path');
+var ip = internalIp();
+var fs = require('fs');
 
-function filter(filePath) {
-    return path.extname(filePath) === '.mp4';
-}
-
-var isFile = function(path) {
-  return fs.existsSync(path) && fs.statSync(path).isFile();
+var isFile = function(item) {
+  return fs.existsSync(item.path) && fs.statSync(item.path).isFile();
 };
 
-var isDir = function(path) {
-  return fs.existsSync(path) && fs.lstatSync(path).isDirectory();
+var contains = function(arr, cb) {
+  for (var i=0, len=arr.length; i<len; i++) {
+    if (cb(arr[i], i)) return true;
+  }
+  return false;
 };
 
 var localfile = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
-
-  if (isDir(ctx.options.path)) {
-    var list = fs.listFilesSync(ctx.options.path, { filter: filter });
-    ctx.options.localPlaylist = list.map(function each(item) { return ctx.options.path + item; });
-  }
-
-  if (!isFile(ctx.options.path) && !ctx.options.localPlaylist) return next();
-
-  var filePath = (!ctx.options.localPlaylist) ? ctx.options.path : ctx.options.localPlaylist.shift();
+  if (!contains(ctx.options.playlist, isFile)) return next();
 
   getPort(function(err, port) {
-    ctx.options.path = 'http://' + internalIp() + ':' + port;
-    ctx.options.type = 'video/mp4';
-    ctx.options.media = {
-      metadata: {
-        title: path.basename(filePath)
+    var route = router();
+    var list = ctx.options.playlist.slice(0);
+
+    ctx.options.playlist = list.map(function(item, idx) {
+      if (!isFile(item)) return item;
+      return {
+        path: 'http://' + internalIp() + ':' + port + '/' + idx,
+        type: 'video/mp4',
+        media: {
+          metadata: {
+            title: path.basename(item.path)
+          }
+        }
       }
-    };
-    http.createServer(function(req, res) {
+    });
+
+    route.all('/{idx}', function(req, res) {
       res.writeHead(200, {
         'Access-Control-Allow-Origin': '*'
       });
-      fs.createReadStream(filePath).pipe(res);
-    }).listen(port);
+
+      fs.createReadStream(list[req.params.idx].path).pipe(res);
+    });
+
+    http.createServer(route).listen(port);
     next();
   });
 };

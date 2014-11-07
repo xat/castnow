@@ -22,7 +22,10 @@ var isSrt = function(path) {
 };
 
 var attachSubtitles = function(ctx) {
-  ctx.options.media.tracks = [{
+  if (!ctx.options.playlist[0].media) {
+    ctx.options.playlist[0].media = {};
+  }
+  ctx.options.playlist[0].media.tracks = [{
     trackId: 1,
     type: 'TEXT',
     trackContentId: ctx.options.subtitles,
@@ -31,7 +34,7 @@ var attachSubtitles = function(ctx) {
     language: 'en-US',
     subtype: 'SUBTITLES'
   }];
-  ctx.options.activeTrackIds = [1];
+  ctx.options.playlist[0].activeTrackIds = [1];
 }
 
 /*
@@ -43,7 +46,7 @@ var attachSubtitles = function(ctx) {
 */
 var subtitles = function(ctx, next) {
   if (!ctx.options.subtitles) return next();
-  if (!ctx.options.media) ctx.options.media = {};
+  if (ctx.options.playlist.length > 1) return next();
 
   srtToVtt(ctx.options.subtitles, function(err, data) {
     if (err) return next();

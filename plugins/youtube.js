@@ -19,19 +19,17 @@ Yt.prototype.load = function(opts, cb) {
     type: 'flingVideo',
     data: {
       currentTime: 0,
-      videoId: opts.path
+      videoId: getYouTubeId(opts.path)
     }
   };
   this.ytreq.request(opts);
-  cb();
+  if (cb) cb();
 };
 
 var youtube = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
-  var id = getYouTubeId(ctx.options.path);
-  if (!id) return next();
+  if (!getYouTubeId(ctx.options.playlist[0].path)) return next();
   ctx.api = Yt;
-  ctx.options.path = id;
   next();
 };
 

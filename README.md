@@ -12,8 +12,11 @@ playback session.
 // start playback of a local video file
 castnow ./myvideo.mp4
 
-// start playback of video files in the local directory
+// start playback of video and mp3 files in the local directory
 castnow ./mydirectory/
+
+// playback 3 videos after each other
+castnow video1.mp4 video2.mp4 video3.mp4
 
 // start playback of some mp4 file over the web
 castnow http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4
@@ -56,6 +59,7 @@ space   // toggle between play and pause
 m       // toggle between mute and unmute
 up      // volume up
 down    // volume down
+s       // skip the current item in the playlist
 
 ```
 

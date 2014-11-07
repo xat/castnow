@@ -8,25 +8,41 @@ var keypress = require('keypress');
 var log = require('single-line-log').stdout;
 var ui = require('playerui')();
 var circulate = require('array-loop');
+var xtend = require('xtend');
+var noop = function() {};
 
 // plugins
+var directories = require('./plugins/directories');
 var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
 var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 
+var len = opts._.length;
+
 if (opts._.length) {
-  opts.path = opts._[0];
+  opts.playlist = opts._.map(function(item) {
+    return {
+      path: item
+    };
+  });
 }
 
 delete opts._;
 
 ui.showLabels('state');
 
-var localStash = [];
+var last = function(fn, l) {
+  return function() {
+    var args = Array.prototype.slice.call(arguments);
+    args.push(l);
+    return l = fn.apply(null, args);
+  };
+};
 
 var ctrl = function(err, p, ctx) {
+  var playlist = ctx.options.playlist;
   var volume;
 
   if (err) {
@@ -70,6 +86,21 @@ var ctrl = function(err, p, ctx) {
   p.on('playing', updateTitle);
   updateTitle();
 
+  var nextInPlaylist = function() {
+    if (!playlist.length) return;
+    ui.showLabels('state');
+    p.load(playlist[0], noop);
+    playlist.shift();
+  };
+
+  p.on('status', last(function(status, memo) {
+    if (status.playerState !== 'IDLE') return;
+    if (status.idleReason !== 'FINISHED') return;
+    if (memo && memo.playerState === 'IDLE') return;
+    nextInPlaylist();
+    return status;
+  }));
+
   var keyMappings = {
 
     // toggle between play / pause
@@ -112,6 +143,11 @@ var ctrl = function(err, p, ctx) {
         if (err) return;
         volume = status;
       });
+    },
+
+    // skip current item in playlist
+    s: function() {
+      nextInPlaylist();
     }
 
   };
@@ -143,28 +179,11 @@ var logState = (function() {
 })();
 
 player.use(function(ctx, next) {
-
-  ctx.on('status', function(status) {
-
-    if (ctx.options.localPlaylist) {
-      localStash = ctx.options.localPlaylist;
-      delete ctx.options.localPlaylist;
-    }
-
-    if (status === 'idle' && localStash.length) {
-      var media = localStash.shift();
-      ui.setLabel('source', 'Source', path.basename(media));
-      ui.showLabels('state', 'source');
-      ui.render();
-      player.launch({ path: media }, ctrl);
-    }
-
-    logState(status);
-
-  });
+  ctx.on('status', logState);
   next();
 });
 
+player.use(directories);
 player.use(torrent);
 player.use(localfile);
 player.use(youtube);
@@ -172,11 +191,13 @@ player.use(transcode);
 player.use(subtitles);
 
 player.use(function(ctx, next) {
-  if (!ctx.options.type) ctx.options.type = 'video/mp4';
+  if (ctx.mode !== 'launch') return;
+  ctx.options = xtend(ctx.options, ctx.options.playlist[0]);
+  ctx.options.playlist.shift();
   next();
 });
 
-if (!opts.path) {
+if (!opts.playlist) {
   player.attach(opts, ctrl);
 } else {
   player.launch(opts, ctrl);
