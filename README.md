@@ -53,6 +53,8 @@ space   // toggle between play and pause
 m       // toggle between mute and unmute
 up      // volume up
 down    // volume down
+left	// seek backward (keep pressed / multiple press for faster seek)
+right	// seek forward (keep pressed / multiple press for faster seek)
 
 ```
 
