@@ -16,8 +16,8 @@ var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 
 // (Global variables) Usefull for seeking in the player.
-currentSeekCounter = 0;
-currentTimeout = 0;
+var currentSeekCounter = 0;
+var currentTimeout = 0;
 
 if (opts._.length) {
   opts.path = opts._[0];
