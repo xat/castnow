@@ -67,6 +67,7 @@ down    // volume down
 ### Contributers
 
 * [tooryx](https://github.com/tooryx)
+* [Przemyslaw Pluta](https://github.com/przemyslawpluta)
 
 ## License
 Copyright (c) 2014 Simon Kusterer
