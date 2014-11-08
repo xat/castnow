@@ -35,7 +35,7 @@ var localfile = function(ctx, next) {
             title: path.basename(item.path)
           }
         }
-      }
+      };
     });
 
     route.all('/{idx}', function(req, res) {

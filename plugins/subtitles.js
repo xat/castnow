@@ -1,5 +1,5 @@
-var http = require('http')
-var fs = require('fs')
+var http = require('http');
+var fs = require('fs');
 var getPort = require('get-port');
 var srt2vtt = require('srt2vtt');
 var internalIp = require('internal-ip');
@@ -35,7 +35,7 @@ var attachSubtitles = function(ctx) {
     subtype: 'SUBTITLES'
   }];
   ctx.options.playlist[0].activeTrackIds = [1];
-}
+};
 
 /*
 ** Handles subtitles, the process is the following:

@@ -37,7 +37,8 @@ var last = function(fn, l) {
   return function() {
     var args = Array.prototype.slice.call(arguments);
     args.push(l);
-    return l = fn.apply(null, args);
+    l = fn.apply(null, args);
+    return l;
   };
 };
 
@@ -68,8 +69,10 @@ var ctrl = function(err, p, ctx) {
 
   var updateTitle = function() {
     p.getStatus(function(err, status) {
-      if (!status.media || !status.media.metadata
-          || !status.media.metadata.title) return;
+      if (!status.media ||
+          !status.media.metadata ||
+          !status.media.metadata.title) return;
+
       var metadata = status.media.metadata;
       var title;
       if (metadata.artist) {

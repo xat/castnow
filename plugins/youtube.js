@@ -14,12 +14,12 @@ Yt.APP_ID = '233637DE';
 
 inherits(Yt, Api);
 
-Yt.prototype.load = function(opts, cb) {
+Yt.prototype.load = function(options, cb) {
   var opts = {
     type: 'flingVideo',
     data: {
       currentTime: 0,
-      videoId: getYouTubeId(opts.path)
+      videoId: getYouTubeId(options.path)
     }
   };
   this.ytreq.request(opts);
