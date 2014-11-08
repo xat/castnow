@@ -1,6 +1,7 @@
 var fs = require('fs-extended');
-var join = require('path').join;
-var extname = require('path').extname;
+var path = require('path');
+var join = path.join;
+var extname = path.extname;
 
 var acceptedExtensions = {
   '.mp3': true,
