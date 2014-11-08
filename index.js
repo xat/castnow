@@ -5,7 +5,6 @@ var player = require('chromecast-player')();
 var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
 var keypress = require('keypress');
-var log = require('single-line-log').stdout;
 var ui = require('playerui')();
 var circulate = require('array-loop');
 var xtend = require('xtend');

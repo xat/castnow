@@ -42,7 +42,6 @@
     "playerui": "^1.0.1",
     "read-torrent": "^1.0.0",
     "router": "^0.6.2",
-    "single-line-log": "^0.4.1",
     "srt2vtt": "^1.0.0",
     "stream-transcoder": "0.0.5",
     "xtend": "^4.0.0"
