@@ -56,7 +56,11 @@ Otherwise castnow will just use the first device it finds in the network.
 * `--subtitles <path/URL>` This can be a path or URL to a vtt or srt file which
 contains subtitles.
 
-* `--verbose` Hide the player timeline
+* `--verbose` Hide the player timeline.
+
+* `--peerflix-* <val>` Pass options to peerflix.
+
+* `--ffmpeg-* <val>` Pass options to ffmpeg.
 
 ### player controls
 

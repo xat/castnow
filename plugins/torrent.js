@@ -1,6 +1,7 @@
 var readTorrent = require('read-torrent');
 var peerflix = require('peerflix');
 var internalIp = require('internal-ip');
+var grabOpts = require('../utils/grab-opts');
 
 var torrent = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
@@ -14,7 +15,7 @@ var torrent = function(ctx, next) {
   readTorrent(path, function(err, torrent) {
     if (err) return next();
 
-    var engine = peerflix(torrent);
+    var engine = peerflix(torrent, grabOpts(ctx.options, 'peerflix-'));
     engine.server.once('listening', function() {
       ctx.options.playlist[0] = {
         path: 'http://'+internalIp()+':'+engine.server.address().port,

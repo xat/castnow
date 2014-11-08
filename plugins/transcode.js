@@ -3,6 +3,7 @@ var getPort = require('get-port');
 var internalIp = require('internal-ip');
 var got = require('got');
 var Transcoder = require('stream-transcoder');
+var grabOpts = require('../utils/grab-opts');
 
 var transcode = function(ctx, next) {
   if (ctx.mode !== 'launch' || !ctx.options.tomp4) return next();
@@ -17,15 +18,19 @@ var transcode = function(ctx, next) {
     ctx.options.disableTimeline = true;
     ctx.options.disableSeek = true;
     http.createServer(function(req, res) {
+      var opts = grabOpts(ctx.options, 'ffmpeg-');
       res.writeHead(200, {
         'Access-Control-Allow-Origin': '*'
       });
-      new Transcoder(got(orgPath))
+      var trans = new Transcoder(got(orgPath))
         .videoCodec('h264')
         .format('mp4')
         .custom('strict', 'experimental')
-        .stream()
-        .pipe(res);
+        .stream();
+      for (var key in opts) {
+        trans.custom(key, opts[key]);
+      }
+      trans.pipe(res);
     }).listen(port);
     next();
   });
