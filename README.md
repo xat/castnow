@@ -12,11 +12,22 @@ playback session.
 // start playback of a local video file
 castnow ./myvideo.mp4
 
+// start playback of video and mp3 files in the local directory
+castnow ./mydirectory/
+
+// playback 3 videos after each other
+castnow video1.mp4 video2.mp4 video3.mp4
+
 // start playback of some mp4 file over the web
 castnow http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4
 
 // start playback of some youtube clip
 castnow https://www.youtube.com/watch?v=pcVRrlmpcWk
+
+// playback multiple youtube clips after each other
+castnow https://www.youtube.com/watch?v=ptRlYs3Cp4E \
+        https://www.youtube.com/watch?v=3vqmJ9k2010 \
+        https://www.youtube.com/watch?v=VVMYqcMFEys
 
 // start playback of some video over torrent
 castnow <url-to-torrent-file OR magnet>
@@ -53,11 +64,11 @@ space   // toggle between play and pause
 m       // toggle between mute and unmute
 up      // volume up
 down    // volume down
-left	// seek backward (keep pressed / multiple press for faster seek)
-right	// seek forward (keep pressed / multiple press for faster seek)
+left    // seek backward (keep pressed / multiple press for faster seek)
+right   // seek forward (keep pressed / multiple press for faster seek)
+s       // skip the current item in the playlist (only supported in launch-mode)
 
 ```
-
 
 ### Installation
 
@@ -66,6 +77,7 @@ right	// seek forward (keep pressed / multiple press for faster seek)
 ### Contributers
 
 * [tooryx](https://github.com/tooryx)
+* [Przemyslaw Pluta](https://github.com/przemyslawpluta)
 
 ## License
 Copyright (c) 2014 Simon Kusterer

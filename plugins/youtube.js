@@ -14,24 +14,22 @@ Yt.APP_ID = '233637DE';
 
 inherits(Yt, Api);
 
-Yt.prototype.load = function(opts, cb) {
+Yt.prototype.load = function(options, cb) {
   var opts = {
     type: 'flingVideo',
     data: {
       currentTime: 0,
-      videoId: opts.path
+      videoId: getYouTubeId(options.path)
     }
   };
   this.ytreq.request(opts);
-  cb();
+  if (cb) cb();
 };
 
 var youtube = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
-  var id = getYouTubeId(ctx.options.path);
-  if (!id) return next();
+  if (!getYouTubeId(ctx.options.playlist[0].path)) return next();
   ctx.api = Yt;
-  ctx.options.path = id;
   next();
 };
 

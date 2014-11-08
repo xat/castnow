@@ -1,6 +1,6 @@
 {
   "name": "castnow",
-  "version": "0.1.4",
+  "version": "0.2.1",
   "description": "commandline chromecast player",
   "main": "index.js",
   "bin": {
@@ -31,6 +31,7 @@
     "castv2-client": "0.0.8",
     "chalk": "^0.5.1",
     "chromecast-player": "0.1.6",
+    "fs-extended": "^0.2.0",
     "get-port": "^1.0.0",
     "get-youtube-id": "^0.1.3",
     "got": "^1.2.2",
@@ -42,8 +43,9 @@
     "playerui": "^1.0.1",
     "range-parser": "^1.0.2",
     "read-torrent": "^1.0.0",
-    "single-line-log": "^0.4.1",
+    "router": "^0.6.2",
     "srt2vtt": "^1.0.0",
-    "stream-transcoder": "0.0.5"
+    "stream-transcoder": "0.0.5",
+    "xtend": "^4.0.0"
   }
 }

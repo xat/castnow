@@ -1,29 +1,48 @@
 #!/usr/bin/env node
 
+var path = require('path');
 var player = require('chromecast-player')();
 var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
 var keypress = require('keypress');
-var log = require('single-line-log').stdout;
 var ui = require('playerui')();
 var circulate = require('array-loop');
+var xtend = require('xtend');
+var noop = function() {};
 
 // plugins
+var directories = require('./plugins/directories');
 var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
 var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 
+var len = opts._.length;
+
 if (opts._.length) {
-  opts.path = opts._[0];
+  opts.playlist = opts._.map(function(item) {
+    return {
+      path: item
+    };
+  });
 }
 
 delete opts._;
 
 ui.showLabels('state');
 
+var last = function(fn, l) {
+  return function() {
+    var args = Array.prototype.slice.call(arguments);
+    args.push(l);
+    l = fn.apply(null, args);
+    return l;
+  };
+};
+
 var ctrl = function(err, p, ctx) {
+  var playlist = ctx.options.playlist;
   var volume;
 
   if (err) {
@@ -53,8 +72,8 @@ var ctrl = function(err, p, ctx) {
     var perSeek = 30;
     return function(increment) {
       if (ctx.options.disableSeek) return;
-      if (increment > 0 && currentSeekCounter < 0 ||
-          increment < 0 && currentSeekCounter > 0)
+      if (increment > 0 && currentSeekCounter < 0
+          || increment < 0 && currentSeekCounter > 0)
           currentSeekCounter = 0;
 
       currentSeekCounter += increment;
@@ -73,8 +92,10 @@ var ctrl = function(err, p, ctx) {
 
   var updateTitle = function() {
     p.getStatus(function(err, status) {
-      if (!status.media || !status.media.metadata
-          || !status.media.metadata.title) return;
+      if (!status.media ||
+          !status.media.metadata ||
+          !status.media.metadata.title) return;
+
       var metadata = status.media.metadata;
       var title;
       if (metadata.artist) {
@@ -90,6 +111,22 @@ var ctrl = function(err, p, ctx) {
 
   p.on('playing', updateTitle);
   updateTitle();
+
+  var nextInPlaylist = function() {
+    if (ctx.mode !== 'launch') return;
+    if (!playlist.length) return;
+    ui.showLabels('state');
+    p.load(playlist[0], noop);
+    playlist.shift();
+  };
+
+  p.on('status', last(function(status, memo) {
+    if (status.playerState !== 'IDLE') return;
+    if (status.idleReason !== 'FINISHED') return;
+    if (memo && memo.playerState === 'IDLE') return;
+    nextInPlaylist();
+    return status;
+  }));
 
   var keyMappings = {
 
@@ -135,6 +172,11 @@ var ctrl = function(err, p, ctx) {
       });
     },
 
+    // skip current item in playlist
+    s: function() {
+      nextInPlaylist();
+    },
+
     // Rewind, one "seekCount" per press
     left: function() {
       changeCurrentSeekCounter(-1);
@@ -173,10 +215,11 @@ var logState = (function() {
 })();
 
 player.use(function(ctx, next) {
-  ctx.on('status', logState)
+  ctx.on('status', logState);
   next();
 });
 
+player.use(directories);
 player.use(torrent);
 player.use(localfile);
 player.use(youtube);
@@ -184,11 +227,13 @@ player.use(transcode);
 player.use(subtitles);
 
 player.use(function(ctx, next) {
-  if (!ctx.options.type) ctx.options.type = 'video/mp4';
+  if (ctx.mode !== 'launch') return next();
+  ctx.options = xtend(ctx.options, ctx.options.playlist[0]);
+  ctx.options.playlist.shift();
   next();
 });
 
-if (!opts.path) {
+if (!opts.playlist) {
   player.attach(opts, ctrl);
 } else {
   player.launch(opts, ctrl);

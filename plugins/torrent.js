@@ -4,23 +4,27 @@ var internalIp = require('internal-ip');
 
 var torrent = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
+  if (ctx.options.playlist.length > 1) return next();
+  var path = ctx.options.playlist[0].path;
 
-  if (!/^magnet:/.test(ctx.options.path) &&
-      !/torrent$/.test(ctx.options.path) &&
+  if (!/^magnet:/.test(path) &&
+      !/torrent$/.test(path) &&
       !ctx.options.torrent) return next();
 
-  readTorrent(ctx.options.path, function(err, torrent) {
+  readTorrent(path, function(err, torrent) {
     if (err) return next();
 
     var engine = peerflix(torrent);
     engine.server.once('listening', function() {
-      ctx.options.path = 'http://'+internalIp()+':'+engine.server.address().port;
-      ctx.options.media = {
-        metadata: {
-          title: engine.server.index.name
+      ctx.options.playlist[0] = {
+        path: 'http://'+internalIp()+':'+engine.server.address().port,
+        type: 'video/mp4',
+        media: {
+          metadata: {
+            title: engine.server.index.name
+          }
         }
       };
-      ctx.options.type = 'video/mp4';
       next();
     });
   });
