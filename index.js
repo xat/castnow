@@ -30,6 +30,10 @@ if (opts._.length) {
 
 delete opts._;
 
+if (opts.verbose) {
+  ui.render = noop;
+}
+
 ui.showLabels('state');
 
 var last = function(fn, l) {
