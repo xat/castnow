@@ -3,7 +3,6 @@ var getPort = require('get-port');
 var internalIp = require('internal-ip');
 var router = require('router');
 var path = require('path');
-var ip = internalIp();
 var fs = require('fs');
 
 var isFile = function(item) {
