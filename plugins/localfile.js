@@ -3,6 +3,7 @@ var getPort = require('get-port');
 var internalIp = require('internal-ip');
 var fs = require('fs');
 var path = require('path');
+var serveMp4 = require('../utils/serve-mp4');
 
 var isFile = function(path) {
   return fs.existsSync(path) && fs.statSync(path).isFile();
@@ -22,10 +23,7 @@ var localfile = function(ctx, next) {
       }
     };
     http.createServer(function(req, res) {
-      res.writeHead(200, {
-        'Access-Control-Allow-Origin': '*'
-      });
-      fs.createReadStream(filePath).pipe(res);
+      serveMp4(req, res, filePath);
     }).listen(port);
     next();
   });
