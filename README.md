@@ -64,7 +64,7 @@ space   // toggle between play and pause
 m       // toggle between mute and unmute
 up      // volume up
 down    // volume down
-s       // skip the current item in the playlist
+s       // skip the current item in the playlist (only supported in launch-mode)
 
 ```
 

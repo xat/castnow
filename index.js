@@ -89,6 +89,7 @@ var ctrl = function(err, p, ctx) {
   updateTitle();
 
   var nextInPlaylist = function() {
+    if (ctx.mode !== 'launch') return;
     if (!playlist.length) return;
     ui.showLabels('state');
     p.load(playlist[0], noop);
@@ -193,7 +194,7 @@ player.use(transcode);
 player.use(subtitles);
 
 player.use(function(ctx, next) {
-  if (ctx.mode !== 'launch') return;
+  if (ctx.mode !== 'launch') return next();
   ctx.options = xtend(ctx.options, ctx.options.playlist[0]);
   ctx.options.playlist.shift();
   next();
