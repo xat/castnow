@@ -12,6 +12,7 @@ var transcode = function(ctx, next) {
     ctx.options.path = 'http://' + internalIp() + ':' + port;
     ctx.options.type = 'video/mp4';
     ctx.options.disableTimeline = true;
+    ctx.options.disableSeek = true;
     http.createServer(function(req, res) {
       res.writeHead(200, {
         'Access-Control-Allow-Origin': '*'

@@ -15,10 +15,6 @@ var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 
-// (Global variables) Usefull for seeking in the player.
-var currentSeekCounter = 0;
-var currentTimeout = 0;
-
 if (opts._.length) {
   opts.path = opts._[0];
 }
@@ -26,36 +22,6 @@ if (opts._.length) {
 delete opts._;
 
 ui.showLabels('state');
-
-/*
-** The following two functions are used when the left/right keys are pressed.
-** They are responsible for seeking the player.
-*/
-var seekFunction = function(player) {
-    if (currentSeekCounter == 0)
-	return;
-
-    player.getStatus(function(err, status) {
-	var timeToSeekTo = (currentSeekCounter * 30) + status.currentTime;
-	player.seek(timeToSeekTo);
-	currentSeekCounter = 0;
-    });
-}
-
-var changeCurrentSeekCounter = function(increment, p) {
-    if (increment > 0 && currentSeekCounter < 0)
-	currentSeekCounter = 0;
-
-    if (increment < 0 && currentSeekCounter > 0)
-	currentSeekCounter = 0;
-
-    currentSeekCounter += increment;
-
-    if (currentTimeout != 0)
-	clearTimeout(currentTimeout);
-
-    currentTimeout = setTimeout(seekFunction, 500, p);
-};
 
 var ctrl = function(err, p, ctx) {
   var volume;
@@ -80,6 +46,30 @@ var ctrl = function(err, p, ctx) {
       ui.render();
     });
   }
+
+  var changeCurrentSeekCounter = (function() {
+    var currentSeekCounter = 0;
+    var currentTimeout = 0;
+    var perSeek = 30;
+    return function(increment) {
+      if (ctx.options.disableSeek) return;
+      if (increment > 0 && currentSeekCounter < 0 ||
+          increment < 0 && currentSeekCounter > 0)
+          currentSeekCounter = 0;
+
+      currentSeekCounter += increment;
+      if (currentTimeout !== 0) clearTimeout(currentTimeout);
+
+      currentTimeout = setTimeout(function() {
+        if (currentSeekCounter === 0) return;
+        p.getStatus(function(err, status) {
+          var timeToSeekTo = (currentSeekCounter * perSeek) + status.currentTime;
+          p.seek(timeToSeekTo);
+          currentSeekCounter = 0;
+        });
+      }, 500, p);
+    };
+  })();
 
   var updateTitle = function() {
     p.getStatus(function(err, status) {
@@ -147,12 +137,12 @@ var ctrl = function(err, p, ctx) {
 
     // Rewind, one "seekCount" per press
     left: function() {
-	changeCurrentSeekCounter(-1, p);
+      changeCurrentSeekCounter(-1);
     },
 
     // Forward, one "seekCount" per press
     right: function() {
-	changeCurrentSeekCounter(1, p);
+      changeCurrentSeekCounter(1);
     }
   };
 
