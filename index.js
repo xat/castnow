@@ -176,9 +176,19 @@ var ctrl = function(err, p, ctx) {
       });
     },
 
-    // skip current item in playlist
-    s: function() {
+    // next item in playlist
+    n: function() {
       nextInPlaylist();
+    },
+
+    // stop playback
+    s: function() {
+      p.stop();
+    },
+
+    // quit
+    q: function() {
+      process.exit();
     },
 
     // Rewind, one "seekCount" per press

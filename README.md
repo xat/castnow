@@ -72,7 +72,9 @@ up      // volume up
 down    // volume down
 left    // seek backward (keep pressed / multiple press for faster seek)
 right   // seek forward (keep pressed / multiple press for faster seek)
-s       // skip the current item in the playlist (only supported in launch-mode)
+n       // next item in the playlist (only supported in launch-mode)
+s       // stop playback
+q       // quit
 
 ```
 
