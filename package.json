@@ -30,7 +30,6 @@
     "array-loop": "^1.0.0",
     "castv2-client": "0.0.8",
     "chalk": "^0.5.1",
-    "cheerio": "^0.18.0",
     "chromecast-player": "0.1.6",
     "fs-extended": "^0.2.0",
     "get-port": "^1.0.0",
@@ -45,10 +44,10 @@
     "query-string": "^1.0.0",
     "range-parser": "^1.0.2",
     "read-torrent": "^1.0.0",
-    "request": "^2.47.0",
     "router": "^0.6.2",
     "srt2vtt": "^1.0.0",
     "stream-transcoder": "0.0.5",
+    "xml2js": "^0.4.4",
     "xtend": "^4.0.0"
   }
 }

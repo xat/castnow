@@ -7,13 +7,13 @@ var keypress = require('keypress');
 var ui = require('playerui')();
 var circulate = require('array-loop');
 var xtend = require('xtend');
-var pyt = require('./utils/playlist-yt');
 var noop = function() {};
 
 // plugins
 var directories = require('./plugins/directories');
 var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
+var youtubeplaylist = require('./plugins/youtubeplaylist');
 var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
@@ -264,6 +264,7 @@ player.use(function(ctx, next) {
 player.use(directories);
 player.use(torrent);
 player.use(localfile);
+player.use(youtubeplaylist);
 player.use(youtube);
 player.use(transcode);
 player.use(subtitles);
@@ -278,9 +279,7 @@ player.use(function(ctx, next) {
 if (!opts.playlist) {
   player.attach(opts, ctrl);
 } else {
-  pyt(opts, function ytList(opts) {
-    player.launch(opts, ctrl);
-  });
+  player.launch(opts, ctrl);
 }
 
 module.exports = player;
