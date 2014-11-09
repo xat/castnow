@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-var path = require('path');
 var player = require('chromecast-player')();
 var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
@@ -8,6 +7,7 @@ var keypress = require('keypress');
 var ui = require('playerui')();
 var circulate = require('array-loop');
 var xtend = require('xtend');
+var pyt = require('./utils/playlist-yt');
 var noop = function() {};
 
 // plugins
@@ -19,7 +19,7 @@ var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 
 if (opts.help) {
-  console.log([
+  return console.log([
     '',
     'Usage: castnow [<media>, <media>, ...] [OPTIONS]',
     '',
@@ -45,11 +45,8 @@ if (opts.help) {
     's                       Stop playback',
     'quit                    Quit',
     ''
-  ].join("\n"));
-  return;
+  ].join('\n'));
 }
-
-var len = opts._.length;
 
 if (opts._.length) {
   opts.playlist = opts._.map(function(item) {
@@ -281,7 +278,9 @@ player.use(function(ctx, next) {
 if (!opts.playlist) {
   player.attach(opts, ctrl);
 } else {
-  player.launch(opts, ctrl);
+  pyt(opts, function ytList(opts) {
+    player.launch(opts, ctrl);
+  });
 }
 
 module.exports = player;

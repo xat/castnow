@@ -29,6 +29,19 @@ castnow https://www.youtube.com/watch?v=ptRlYs3Cp4E \
         https://www.youtube.com/watch?v=3vqmJ9k2010 \
         https://www.youtube.com/watch?v=VVMYqcMFEys
 
+// playback single youtube playlist
+castnow https://www.youtube.com/playlist?list=PLrIJmi5XabBPCYKEQZn9foC8MJfLGmdPz
+
+// playback multiple youtube playlists after each other
+castnow https://www.youtube.com/playlist?list=PLrIJmi5XabBPCYKEQZn9foC8MJfLGmdPz \
+        https://www.youtube.com/playlist?list=PLrIJmi5XabBPNDJ_YyC-KNa_cZ6SwTOYC
+
+// playback multiple youtube playlists and clips after each other
+castnow https://www.youtube.com/playlist?list=PLrIJmi5XabBPCYKEQZn9foC8MJfLGmdPz \
+		https://www.youtube.com/playlist?list=PLrIJmi5XabBPNDJ_YyC-KNa_cZ6SwTOYC \
+        https://www.youtube.com/watch?v=3vqmJ9k2010 \
+        https://www.youtube.com/watch?v=VVMYqcMFEys
+
 // start playback of some video over torrent
 castnow <url-to-torrent-file OR magnet>
 
@@ -87,7 +100,7 @@ q       // quit
 ### Contributers
 
 * [tooryx](https://github.com/tooryx)
-* [Przemyslaw Pluta](https://github.com/przemyslawpluta)
+* [przemyslawpluta](https://github.com/przemyslawpluta)
 
 ## License
 Copyright (c) 2014 Simon Kusterer
