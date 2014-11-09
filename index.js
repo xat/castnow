@@ -18,6 +18,37 @@ var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 
+if (opts.help) {
+  console.log([
+    '',
+    'Usage: castnow [<media>, <media>, ...] [OPTIONS]',
+    '',
+    'Option                  Meaning',
+    '--tomp4                 Convert file to mp4 while playback',
+    '--device <name>         The name of the chromecast device that should be used',
+    '--subtitles <path/url>  Path or URL to an SRT or VTT file',
+    '--verbose               No output',
+    '--peerflix-* <value>    Pass options to peerflix',
+    '--ffmpeg-* <value>      Pass options to ffmpeg',
+    '--help                  This help screen',
+    '',
+    'Player controls',
+    '',
+    'Key                     Meaning',
+    'space                   Toggle between play and pause',
+    'm                       Toggle between mute and unmute',
+    'up                      Volume Up',
+    'down                    Volume Down',
+    'left                    Seek backward',
+    'right                   Seek forward',
+    'n                       Next in playlist',
+    's                       Stop playback',
+    'quit                    Quit',
+    ''
+  ].join("\n"));
+  return;
+}
+
 var len = opts._.length;
 
 if (opts._.length) {
