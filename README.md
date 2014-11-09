@@ -62,6 +62,8 @@ contains subtitles.
 
 * `--ffmpeg-* <val>` Pass options to ffmpeg.
 
+* `--help` Display help message.
+
 ### player controls
 
 ```
