@@ -147,9 +147,11 @@ var ctrl = function(err, p, ctx) {
   var nextInPlaylist = function() {
     if (ctx.mode !== 'launch') return;
     if (!playlist.length) return;
-    ui.showLabels('state');
-    p.load(playlist[0], noop);
-    playlist.shift();
+    p.stop(function() {
+      ui.showLabels('state');
+      p.load(playlist[0], noop);
+      playlist.shift();
+    });
   };
 
   p.on('status', last(function(status, memo) {
