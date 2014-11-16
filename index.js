@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-var path = require('path');
 var player = require('chromecast-player')();
 var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
@@ -14,12 +13,13 @@ var noop = function() {};
 var directories = require('./plugins/directories');
 var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
+var youtubeplaylist = require('./plugins/youtubeplaylist');
 var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 
 if (opts.help) {
-  console.log([
+  return console.log([
     '',
     'Usage: castnow [<media>, <media>, ...] [OPTIONS]',
     '',
@@ -45,11 +45,8 @@ if (opts.help) {
     's                       Stop playback',
     'quit                    Quit',
     ''
-  ].join("\n"));
-  return;
+  ].join('\n'));
 }
-
-var len = opts._.length;
 
 if (opts._.length) {
   opts.playlist = opts._.map(function(item) {
@@ -267,6 +264,7 @@ player.use(function(ctx, next) {
 player.use(directories);
 player.use(torrent);
 player.use(localfile);
+player.use(youtubeplaylist);
 player.use(youtube);
 player.use(transcode);
 player.use(subtitles);
