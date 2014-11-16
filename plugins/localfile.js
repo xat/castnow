@@ -28,7 +28,7 @@ var localfile = function(ctx, next) {
     ctx.options.playlist = list.map(function(item, idx) {
       if (!isFile(item)) return item;
       return {
-        path: 'http://' + internalIp() + ':' + port + '/' + idx,
+        path: 'http://' + (ctx.options.myip || internalIp()) + ':' + port + '/' + idx,
         type: 'video/mp4',
         media: {
           metadata: {

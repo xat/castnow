@@ -12,7 +12,7 @@ var transcode = function(ctx, next) {
 
   getPort(function(err, port) {
     ctx.options.playlist[0] = {
-      path: 'http://' + internalIp() + ':' + port,
+      path: 'http://' + (ctx.options.myip || internalIp()) + ':' + port,
       type: 'video/mp4'
     };
     ctx.options.disableTimeline = true;

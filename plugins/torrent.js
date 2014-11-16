@@ -18,7 +18,7 @@ var torrent = function(ctx, next) {
     var engine = peerflix(torrent, grabOpts(ctx.options, 'peerflix-'));
     engine.server.once('listening', function() {
       ctx.options.playlist[0] = {
-        path: 'http://'+internalIp()+':'+engine.server.address().port,
+        path: 'http://' + (ctx.options.myip || internalIp()) + ':' + engine.server.address().port,
         type: 'video/mp4',
         media: {
           metadata: {

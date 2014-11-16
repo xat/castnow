@@ -27,6 +27,7 @@ if (opts.help) {
     '--tomp4                 Convert file to mp4 while playback',
     '--device <name>         The name of the chromecast device that should be used',
     '--subtitles <path/url>  Path or URL to an SRT or VTT file',
+    '--myip <ip>             Your main IP address',
     '--verbose               No output',
     '--peerflix-* <value>    Pass options to peerflix',
     '--ffmpeg-* <value>      Pass options to ffmpeg',

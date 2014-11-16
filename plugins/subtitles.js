@@ -52,7 +52,7 @@ var subtitles = function(ctx, next) {
     if (err) return next();
     getPort(function(err, port) {
       if (err) return next();
-      var addr = 'http://' + internalIp() + ':' + port;
+      var addr = 'http://' + (ctx.options.myip || internalIp()) + ':' + port;
       http.createServer(function(req, res) {
         res.writeHead(200, {
           'Access-Control-Allow-Origin': '*',
