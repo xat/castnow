@@ -1,7 +1,8 @@
-var url = require('url'),
-  got = require('got'),
-  qs = require('query-string'),
-  parser = require('xml2js').parseString;
+var url = require('url');
+var got = require('got');
+var qs = require('query-string');
+var parser = require('xml2js').parseString;
+var logger = require('../utils/logger');
 
 function getPlaylistItems(id, callback) {
 
@@ -53,8 +54,9 @@ var youtubePlaylist = function youtubePlaylist(ctx, next) {
 
   for (i = 0; i < ctx.options.playlist.length; i++) {
       if (/youtube/.test(ctx.options.playlist[i].path) && /playlist\?list/.test(ctx.options.playlist[i].path)) {
-          items.push(qs.parse(url.parse(ctx.options.playlist[i].path).query).list);
-          ctx.options.playlist[i] = items.length;
+        logger.print('[youtubeplaylist] loading youtube playlist', ctx.options.playlist[i].path);
+        items.push(qs.parse(url.parse(ctx.options.playlist[i].path).query).list);
+        ctx.options.playlist[i] = items.length;
       }
   }
 

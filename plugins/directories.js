@@ -2,6 +2,7 @@ var fs = require('fs-extended');
 var path = require('path');
 var join = path.join;
 var extname = path.extname;
+var logger = require('../utils/logger');
 
 var acceptedExtensions = {
   '.mp3': true,
@@ -23,8 +24,10 @@ var flattenFiles = function(playlist) {
   var items = [];
   playlist.forEach(function(item) {
     if (isDir(item)) {
+      logger.print('[directories] directory found:', item.path);
       var mediaFiles = fs.listFilesSync(item.path, { filter: filter });
       items.push.apply(items, mediaFiles.map(function(file) {
+        logger.print('[directories] added file', file, 'from directory', item.path);
         return {
           path: join(item.path, file)
         };

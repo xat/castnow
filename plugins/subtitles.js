@@ -3,6 +3,7 @@ var fs = require('fs');
 var getPort = require('get-port');
 var srt2vtt = require('srt2vtt');
 var internalIp = require('internal-ip');
+var logger = require('../utils/logger');
 var got = require('got');
 
 var srtToVtt = function(source, cb) {
@@ -12,6 +13,7 @@ var srtToVtt = function(source, cb) {
     if (!isSrt(source)) return cb(null, content);
     srt2vtt(content, function(err, data) {
       if (err) return cb(err);
+      logger.print('[subtitles] converted srt to vtt', source);
       cb(null, data);
     });
   });
@@ -50,10 +52,13 @@ var subtitles = function(ctx, next) {
 
   srtToVtt(ctx.options.subtitles, function(err, data) {
     if (err) return next();
+    logger.print('[subtitles] loading subtitles', ctx.options.subtitles);
     getPort(function(err, port) {
       if (err) return next();
-      var addr = 'http://' + (ctx.options.myip || internalIp()) + ':' + port;
+      var ip = ctx.options.myip || internalIp();
+      var addr = 'http://' + ip + ':' + port;
       http.createServer(function(req, res) {
+        logger.print('[subtitles] incoming request');
         res.writeHead(200, {
           'Access-Control-Allow-Origin': '*',
           'Content-Length': data.length,
@@ -61,6 +66,7 @@ var subtitles = function(ctx, next) {
         });
         res.end(data);
       }).listen(port);
+      logger.print('[subtitles] started webserver on address', ip, 'using port', port);
       ctx.options.subtitles = addr;
       attachSubtitles(ctx);
       next();

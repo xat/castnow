@@ -69,7 +69,9 @@ Otherwise castnow will just use the first device it finds in the network.
 * `--subtitles <path/URL>` This can be a path or URL to a vtt or srt file which
 contains subtitles.
 
-* `--myip <IP>` Define your IP (useful if you have multiple network adapters)
+* `--myip <IP>` Your main IP address (useful if you have multiple network adapters)
+
+* `--debug` Output debug messages.
 
 * `--verbose` Hide the player timeline.
 
