@@ -1,6 +1,6 @@
 {
   "name": "castnow",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "commandline chromecast player",
   "main": "index.js",
   "bin": {
