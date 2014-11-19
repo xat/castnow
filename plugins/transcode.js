@@ -39,12 +39,11 @@ var transcode = function(ctx, next) {
         })
         .on('error', function(err) {
             logger.print('[transcode] transcoding error', err);
-        })
-        .stream();
+        });
       for (var key in opts) {
         trans.custom(key, opts[key]);
       }
-      trans.pipe(res);
+      trans.stream().pipe(res);
     }).listen(port);
     logger.print('[transcode] started webserver on address', ip, 'using port', port);
     next();
