@@ -42,6 +42,11 @@ var transcode = function(ctx, next) {
     for (var key in opts) {
       trans.custom(key, opts[key]);
     }
+
+    var args = trans._compileArguments();
+    args = [ '-i', '-' ].concat(args);
+    logger.print('[transcode] spawning ffmpeg', args.join(' '));
+
     trans.stream().pipe(res);
   }).listen(port);
   logger.print('[transcode] started webserver on address', ip, 'using port', port);
