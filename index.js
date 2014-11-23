@@ -62,7 +62,7 @@ if (opts._.length) {
 delete opts._;
 
 if (opts.verbose || opts.debug) {
-  ui.render = noop;
+  ui.hide();
 }
 
 if (opts.debug) {
@@ -296,5 +296,13 @@ if (!opts.playlist) {
   logger.print('[core] launching...');
   player.launch(opts, ctrl);
 }
+
+process.on('SIGINT', function() {
+  process.exit();
+});
+
+process.on('exit', function() {
+  ui.hide();
+});
 
 module.exports = player;
