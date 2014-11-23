@@ -1,10 +1,10 @@
 var http = require('http');
 var fs = require('fs');
-var getPort = require('get-port');
 var srt2vtt = require('srt2vtt');
 var internalIp = require('internal-ip');
 var logger = require('../utils/logger');
 var got = require('got');
+var port = 4101;
 
 var srtToVtt = function(source, cb) {
   var handler = fs.existsSync(source) ? fs.readFile : got;
@@ -53,24 +53,22 @@ var subtitles = function(ctx, next) {
   srtToVtt(ctx.options.subtitles, function(err, data) {
     if (err) return next();
     logger.print('[subtitles] loading subtitles', ctx.options.subtitles);
-    getPort(function(err, port) {
-      if (err) return next();
-      var ip = ctx.options.myip || internalIp();
-      var addr = 'http://' + ip + ':' + port;
-      http.createServer(function(req, res) {
-        logger.print('[subtitles] incoming request');
-        res.writeHead(200, {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Length': data.length,
-          'Content-type': 'text/vtt;charset=utf-8'
-        });
-        res.end(data);
-      }).listen(port);
-      logger.print('[subtitles] started webserver on address', ip, 'using port', port);
-      ctx.options.subtitles = addr;
-      attachSubtitles(ctx);
-      next();
-    });
+    if (err) return next();
+    var ip = ctx.options.myip || internalIp();
+    var addr = 'http://' + ip + ':' + port;
+    http.createServer(function(req, res) {
+      logger.print('[subtitles] incoming request');
+      res.writeHead(200, {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Length': data.length,
+        'Content-type': 'text/vtt;charset=utf-8'
+      });
+      res.end(data);
+    }).listen(port);
+    logger.print('[subtitles] started webserver on address', ip, 'using port', port);
+    ctx.options.subtitles = addr;
+    attachSubtitles(ctx);
+    next();
   });
 };
 

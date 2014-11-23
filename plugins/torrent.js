@@ -3,6 +3,7 @@ var peerflix = require('peerflix');
 var internalIp = require('internal-ip');
 var grabOpts = require('../utils/grab-opts');
 var logger = require('../utils/logger');
+var port = 4102;
 
 var torrent = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
@@ -18,6 +19,7 @@ var torrent = function(ctx, next) {
       logger.print('[torrent] error reading torrent', err);
       return next();
     }
+    if (!ctx.options['peerflix-port']) ctx.options['peerflix-port'] = port;
     var engine = peerflix(torrent, grabOpts(ctx.options, 'peerflix-'));
     var ip = ctx.options.myip || internalIp();
     engine.server.once('listening', function() {
