@@ -45,6 +45,7 @@ var transcode = function(ctx, next) {
 
     var args = trans._compileArguments();
     args = [ '-i', '-' ].concat(args);
+    args.push('pipe:1');
     logger.print('[transcode] spawning ffmpeg', args.join(' '));
 
     trans.stream().pipe(res);
