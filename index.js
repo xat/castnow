@@ -81,14 +81,14 @@ var last = function(fn, l) {
 };
 
 var ctrl = function(err, p, ctx) {
-  var playlist = ctx.options.playlist;
-  var volume;
-
   if (err) {
     logger.print('[core] player error', err);
     console.log(chalk.red(err));
     process.exit();
   }
+
+  var playlist = ctx.options.playlist;
+  var volume;
 
   keypress(process.stdin);
   process.stdin.setRawMode(true);
