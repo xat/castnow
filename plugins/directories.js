@@ -2,7 +2,7 @@ var fs = require('fs-extended');
 var path = require('path');
 var join = path.join;
 var extname = path.extname;
-var logger = require('../utils/logger');
+var debug = require('debug')('castnow:directories');
 
 var acceptedExtensions = {
   '.mp3': true,
@@ -24,10 +24,10 @@ var flattenFiles = function(playlist) {
   var items = [];
   playlist.forEach(function(item) {
     if (isDir(item)) {
-      logger.print('[directories] directory found:', item.path);
+      debug('directory found: %s', item.path);
       var mediaFiles = fs.listFilesSync(item.path, { filter: filter });
       items.push.apply(items, mediaFiles.map(function(file) {
-        logger.print('[directories] added file', file, 'from directory', item.path);
+        debug('added file %s from directory %s', file, item.path);
         return {
           path: join(item.path, file)
         };

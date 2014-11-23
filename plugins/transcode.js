@@ -3,7 +3,7 @@ var internalIp = require('internal-ip');
 var got = require('got');
 var Transcoder = require('stream-transcoder');
 var grabOpts = require('../utils/grab-opts');
-var logger = require('../utils/logger');
+var debug = require('debug')('castnow:transcode');
 var port = 4103;
 
 var transcode = function(ctx, next) {
@@ -20,13 +20,13 @@ var transcode = function(ctx, next) {
   ctx.options.disableSeek = true;
   http.createServer(function(req, res) {
     var opts = grabOpts(ctx.options, 'ffmpeg-');
-    logger.print('[transcode] incoming request for path', orgPath);
+    debug('incoming request for path %s', orgPath);
     res.writeHead(200, {
       'Access-Control-Allow-Origin': '*'
     });
     var s = got(orgPath);
     s.on('error', function(err) {
-      logger.print('[transcode] got error', err);
+      debug('got error: %o', err);
     });
 
     var trans = new Transcoder(s)
@@ -34,10 +34,10 @@ var transcode = function(ctx, next) {
       .format('mp4')
       .custom('strict', 'experimental')
       .on('finish', function() {
-          logger.print('[transcode] finished transcoding');
+        debug('finished transcoding');
       })
       .on('error', function(err) {
-          logger.print('[transcode] transcoding error', err);
+        debug('transcoding error: %o', err);
       });
     for (var key in opts) {
       trans.custom(key, opts[key]);
@@ -46,11 +46,11 @@ var transcode = function(ctx, next) {
     var args = trans._compileArguments();
     args = [ '-i', '-' ].concat(args);
     args.push('pipe:1');
-    logger.print('[transcode] spawning ffmpeg', args.join(' '));
+    debug('spawning ffmpeg %s', args.join(' '));
 
     trans.stream().pipe(res);
   }).listen(port);
-  logger.print('[transcode] started webserver on address', ip, 'using port', port);
+  debug('started webserver on address %s using port %s', ip, port);
   next();
 };
 

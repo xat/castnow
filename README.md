@@ -71,8 +71,6 @@ contains subtitles.
 
 * `--myip <IP>` Your main IP address (useful if you have multiple network adapters)
 
-* `--debug` Output debug messages.
-
 * `--verbose` Hide the player timeline.
 
 * `--peerflix-* <val>` Pass options to peerflix.
@@ -97,11 +95,17 @@ q       // quit
 
 ```
 
-### Installation
+### reporting bugs/issues
+
+Please always append the debug output to your issues. You can enable the debug messages by setting the
+DEBUG ENV variable before running the castnow-command like this: `DEBUG=castnow* castnow ./myvideo.mp4`.
+Some problems are also already addressed in our wiki https://github.com/xat/castnow/wiki.
+
+### installation
 
 `npm install castnow -g`
 
-### Contributers
+### contributers
 
 * [tooryx](https://github.com/tooryx)
 * [przemyslawpluta](https://github.com/przemyslawpluta)

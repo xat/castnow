@@ -7,7 +7,7 @@ var keypress = require('keypress');
 var ui = require('playerui')();
 var circulate = require('array-loop');
 var xtend = require('xtend');
-var logger = require('./utils/logger');
+var debug = require('debug')('castnow');
 var noop = function() {};
 
 // plugins
@@ -30,7 +30,6 @@ if (opts.help) {
     '--subtitles <path/url>  Path or URL to an SRT or VTT file',
     '--myip <ip>             Your main IP address',
     '--verbose               No output',
-    '--debug                 Output debug messages',
     '--peerflix-* <value>    Pass options to peerflix',
     '--ffmpeg-* <value>      Pass options to ffmpeg',
     '--help                  This help screen',
@@ -61,12 +60,8 @@ if (opts._.length) {
 
 delete opts._;
 
-if (opts.verbose || opts.debug) {
+if (opts.verbose || process.env.DEBUG) {
   ui.hide();
-}
-
-if (opts.debug) {
-  logger.on();
 }
 
 ui.showLabels('state');
@@ -82,7 +77,7 @@ var last = function(fn, l) {
 
 var ctrl = function(err, p, ctx) {
   if (err) {
-    logger.print('[core] player error', err);
+    debug('player error: %o', err);
     console.log(chalk.red(err));
     process.exit();
   }
@@ -157,7 +152,7 @@ var ctrl = function(err, p, ctx) {
     if (!playlist.length) return;
     p.stop(function() {
       ui.showLabels('state');
-      logger.print('[core] loading next in playlist');
+      debug('loading next in playlist: %o', playlist[0]);
       p.load(playlist[0], noop);
       playlist.shift();
     });
@@ -243,7 +238,7 @@ var ctrl = function(err, p, ctx) {
 
   process.stdin.on('keypress', function(ch, key) {
     if (key && key.name && keyMappings[key.name]) {
-      logger.print('[core] key pressed', key.name);
+      debug('key pressed: %s', key.name);
       keyMappings[key.name]();
     }
     if (key && key.ctrl && key.name == 'c') {
@@ -261,7 +256,7 @@ var logState = (function() {
   var dots = circulate(['.', '..', '...', '....']);
   return function(status) {
     if (inter) clearInterval(inter);
-    logger.print('[core] player status:', status);
+    debug('player status: %s', status);
     inter = setInterval(function() {
       ui.setLabel('state', 'State', capitalize(status) + dots());
       ui.render();
@@ -290,10 +285,10 @@ player.use(function(ctx, next) {
 });
 
 if (!opts.playlist) {
-  logger.print('[core] attaching...');
+  debug('attaching...');
   player.attach(opts, ctrl);
 } else {
-  logger.print('[core] launching...');
+  debug('launching...');
   player.launch(opts, ctrl);
 }
 

@@ -3,7 +3,7 @@ var castv2Cli = require('castv2-client');
 var RequestResponseController = castv2Cli.RequestResponseController;
 var inherits = require('util').inherits;
 var getYouTubeId = require('get-youtube-id');
-var logger = require('../utils/logger');
+var debug = require('debug')('castnow:youtube');
 
 var Yt = function() {
   Api.apply(this, arguments);
@@ -17,7 +17,7 @@ inherits(Yt, Api);
 
 Yt.prototype.load = function(options, cb) {
   var youtubeId = getYouTubeId(options.path);
-  logger.print('[youtube] loading video with id', youtubeId);
+  debug('loading video with id %s', youtubeId);
   var opts = {
     type: 'flingVideo',
     data: {
@@ -32,7 +32,7 @@ Yt.prototype.load = function(options, cb) {
 var youtube = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
   if (!getYouTubeId(ctx.options.playlist[0].path)) return next();
-  logger.print('[youtube] using youtube api');
+  debug('using youtube api');
   ctx.api = Yt;
   next();
 };

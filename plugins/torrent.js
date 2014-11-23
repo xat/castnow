@@ -2,7 +2,7 @@ var readTorrent = require('read-torrent');
 var peerflix = require('peerflix');
 var internalIp = require('internal-ip');
 var grabOpts = require('../utils/grab-opts');
-var logger = require('../utils/logger');
+var debug = require('debug')('castnow:torrent');
 var port = 4102;
 
 var torrent = function(ctx, next) {
@@ -16,14 +16,14 @@ var torrent = function(ctx, next) {
 
   readTorrent(path, function(err, torrent) {
     if (err) {
-      logger.print('[torrent] error reading torrent', err);
+      debug('error reading torrent: %o', err);
       return next();
     }
     if (!ctx.options['peerflix-port']) ctx.options['peerflix-port'] = port;
     var engine = peerflix(torrent, grabOpts(ctx.options, 'peerflix-'));
     var ip = ctx.options.myip || internalIp();
     engine.server.once('listening', function() {
-      logger.print('[torrent] started webserver on address', ip, 'using port', engine.server.address().port);
+      debug('started webserver on address %s using port %s', ip, engine.server.address().port);
       ctx.options.playlist[0] = {
         path: 'http://' + ip + ':' + engine.server.address().port,
         type: 'video/mp4',

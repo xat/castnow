@@ -2,7 +2,7 @@ var url = require('url');
 var got = require('got');
 var qs = require('query-string');
 var parser = require('xml2js').parseString;
-var logger = require('../utils/logger');
+var debug = require('debug')('castnow:youtubeplaylist');
 
 function getPlaylistItems(id, callback) {
 
@@ -54,7 +54,7 @@ var youtubePlaylist = function youtubePlaylist(ctx, next) {
 
   for (i = 0; i < ctx.options.playlist.length; i++) {
       if (/youtube/.test(ctx.options.playlist[i].path) && /playlist\?list/.test(ctx.options.playlist[i].path)) {
-        logger.print('[youtubeplaylist] loading youtube playlist', ctx.options.playlist[i].path);
+        debug('loading youtube playlist %s', ctx.options.playlist[i].path);
         items.push(qs.parse(url.parse(ctx.options.playlist[i].path).query).list);
         ctx.options.playlist[i] = items.length;
       }

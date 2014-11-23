@@ -3,7 +3,7 @@ var internalIp = require('internal-ip');
 var router = require('router');
 var path = require('path');
 var serveMp4 = require('../utils/serve-mp4');
-var logger = require('../utils/logger');
+var debug = require('debug')('castnow:localfile');
 var fs = require('fs');
 var port = 4100;
 
@@ -40,12 +40,12 @@ var localfile = function(ctx, next) {
   });
 
   route.all('/{idx}', function(req, res) {
-    logger.print('[localfile] incoming request serving', list[req.params.idx].path);
+    debug('incoming request serving %s', list[req.params.idx].path);
     serveMp4(req, res, list[req.params.idx].path);
   });
 
   http.createServer(route).listen(port);
-  logger.print('[localfile] started webserver on address', ip, 'using port', port);
+  debug('started webserver on address %s using port %s', ip, port);
   next();
 
 };
