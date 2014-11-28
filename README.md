@@ -77,6 +77,8 @@ contains subtitles.
 
 * `--ffmpeg-* <val>` Pass options to ffmpeg.
 
+* `--type <val>` Explicity set the mime-type of the first item in the playlist (e.g. 'video/mp4').
+
 * `--bypass-srt-encoding` Disable automatic UTF8 encoding of SRT subtitles.
 
 * `--help` Display help message.
