@@ -152,7 +152,7 @@ var ctrl = function(err, p, ctx) {
 
   var nextInPlaylist = function() {
     if (ctx.mode !== 'launch') return;
-    if (!playlist.length) return;
+    if (!playlist.length) return process.exit();
     p.stop(function() {
       ui.showLabels('state');
       debug('loading next in playlist: %o', playlist[0]);
