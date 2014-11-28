@@ -6,12 +6,14 @@ var debug = require('debug')('castnow:subtitles');
 var got = require('got');
 var port = 4101;
 
-var srtToVtt = function(source, cb) {
+var srtToVtt = function(options, cb) {
+  var source = options.subtitles;
   var handler = fs.existsSync(source) ? fs.readFile : got;
+  var encoder = options['bypass-srt-encoding'] ? srt2vtt.raw : srt2vtt;
   handler(source, function(err, content) {
     if (err) return cb(err);
     if (!isSrt(source)) return cb(null, content);
-    srt2vtt(content, function(err, data) {
+    encoder(content, function(err, data) {
       if (err) return cb(err);
       debug('converted srt to vtt: %s', source);
       cb(null, data);
@@ -50,7 +52,7 @@ var subtitles = function(ctx, next) {
   if (!ctx.options.subtitles) return next();
   if (ctx.options.playlist.length > 1) return next();
 
-  srtToVtt(ctx.options.subtitles, function(err, data) {
+  srtToVtt(ctx.options, function(err, data) {
     if (err) return next();
     debug('loading subtitles', ctx.options.subtitles);
     if (err) return next();

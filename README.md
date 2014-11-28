@@ -77,6 +77,8 @@ contains subtitles.
 
 * `--ffmpeg-* <val>` Pass options to ffmpeg.
 
+* `--bypass-srt-encoding` disable
+
 * `--help` Display help message.
 
 ### player controls

@@ -32,6 +32,7 @@ if (opts.help) {
     '--verbose               No output',
     '--peerflix-* <value>    Pass options to peerflix',
     '--ffmpeg-* <value>      Pass options to ffmpeg',
+    '--bypass-srt-encoding   Disable automatic UTF8 encoding of SRT subtitles', 
     '--help                  This help screen',
     '',
     'Player controls',
