@@ -45,7 +45,7 @@
     "range-parser": "^1.0.2",
     "read-torrent": "^1.0.0",
     "router": "^0.6.2",
-    "srt2vtt": "^1.0.0",
+    "srt2vtt": "^1.2.0",
     "stream-transcoder": "0.0.5",
     "xml2js": "^0.4.4",
     "xtend": "^4.0.0"
