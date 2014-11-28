@@ -1,6 +1,4 @@
 .DS_Store
 node_modules/
 .idea/
-test.mp4
-test.srt
-test.vtt
+samples/
