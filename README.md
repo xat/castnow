@@ -77,7 +77,7 @@ contains subtitles.
 
 * `--ffmpeg-* <val>` Pass options to ffmpeg.
 
-* `--bypass-srt-encoding` disable
+* `--bypass-srt-encoding` Disable automatic UTF8 encoding of SRT subtitles.
 
 * `--help` Display help message.
 
