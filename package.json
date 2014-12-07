@@ -1,6 +1,6 @@
 {
   "name": "castnow",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "commandline chromecast player",
   "main": "index.js",
   "bin": {
@@ -40,7 +40,7 @@
     "mime": "^1.2.11",
     "minimist": "^1.1.0",
     "peerflix": "^0.19.1",
-    "playerui": "^1.1.0",
+    "playerui": "^1.2.0",
     "query-string": "^1.0.0",
     "range-parser": "^1.0.2",
     "read-torrent": "^1.0.0",
