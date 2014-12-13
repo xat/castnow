@@ -34,6 +34,7 @@ if (opts.help) {
     '--ffmpeg-* <value>      Pass options to ffmpeg',
     '--type <val>            Explicity set the mime-type (e.g. "video/mp4")',
     '--bypass-srt-encoding   Disable automatic UTF8 encoding of SRT subtitles',
+    '--seek <value>          Seek to the specified time on start using the format hh:mm:ss',
 
     '--help                  This help screen',
     '',
@@ -146,8 +147,37 @@ var ctrl = function(err, p, ctx) {
       ui.render();
     });
   };
-
+  function unformatTime (string) {
+      var timeArray = string.split(':'),
+          seconds = 0;
+      // turn hours and minutes into seconds and add them all up
+      if (timeArray.length === 3) {
+          // hours
+          seconds = seconds + (parseInt(timeArray[0]) * 60 * 60);
+          // minutes
+          seconds = seconds + (parseInt(timeArray[1]) * 60);
+          // seconds
+          seconds = seconds + parseInt(timeArray[2]);
+      } else if (timeArray.length === 2) {
+          // minutes
+          seconds = seconds + (parseInt(timeArray[0]) * 60);
+          // seconds
+          seconds = seconds + parseInt(timeArray[1]);
+      }
+      return seconds;
+  }
+  var seekToTime = function() {
+    p.getStatus(function(err, status) {
+      var seconds = unformatTime(opts.seek);
+      debug('seeking to %o', opts.seek);
+      p.seek(seconds);
+      p.removeListener('playing', seekToTime);
+    });
+  }
   p.on('playing', updateTitle);
+  if (opts.seek) {
+    p.on('playing', seekToTime);
+  }
   updateTitle();
 
   var nextInPlaylist = function() {
