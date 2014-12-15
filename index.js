@@ -18,6 +18,7 @@ var youtubeplaylist = require('./plugins/youtubeplaylist');
 var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
+var unformatTime = require('./utils/unformat-time')
 
 if (opts.help) {
   return console.log([
@@ -34,6 +35,7 @@ if (opts.help) {
     '--ffmpeg-* <value>      Pass options to ffmpeg',
     '--type <val>            Explicity set the mime-type (e.g. "video/mp4")',
     '--bypass-srt-encoding   Disable automatic UTF8 encoding of SRT subtitles',
+    '--seek <value>          Seek to the specified time on start using the format hh:mm:ss',
 
     '--help                  This help screen',
     '',
@@ -146,8 +148,17 @@ var ctrl = function(err, p, ctx) {
       ui.render();
     });
   };
-
+  var seekToTime = function() {
+    p.getStatus(function(err, status) {
+      var seconds = unformatTime(opts.seek);
+      debug('seeking to %o', opts.seek);
+      p.seek(seconds);
+    });
+  }
   p.on('playing', updateTitle);
+  if (opts.seek) {
+    p.once('playing', seekToTime);
+  }
   updateTitle();
 
   var nextInPlaylist = function() {
