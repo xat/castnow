@@ -31,7 +31,7 @@ var transcode = function(ctx, next) {
 
     var trans = new Transcoder(s)
       .videoCodec('h264')
-      .format('mp4')
+      .format('matroska')
       .custom('strict', 'experimental')
       .on('finish', function() {
         debug('finished transcoding');
