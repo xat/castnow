@@ -6,8 +6,12 @@ var grabOpts = require('../utils/grab-opts');
 var debug = require('debug')('castnow:transcode');
 var port = 4103;
 
+function shouldTranscode(ctx) {
+  return ctx.options.transcode || ctx.options.tomp4;
+}
+
 var transcode = function(ctx, next) {
-  if (ctx.mode !== 'launch' || !ctx.options.tomp4) return next();
+  if (ctx.mode !== 'launch' || ! shouldTranscode(ctx)) return next();
   if (ctx.options.playlist.length > 1) return next();
   var orgPath = ctx.options.playlist[0].path;
 
