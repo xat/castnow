@@ -21,26 +21,8 @@ castnow video1.mp4 video2.mp4 video3.mp4
 // start playback of some mp4 file over the web
 castnow http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4
 
-// start playback of some youtube clip
+// start playback of some youtube clip (only audio at the moment, see #43)
 castnow https://www.youtube.com/watch?v=pcVRrlmpcWk
-
-// playback multiple youtube clips after each other
-castnow https://www.youtube.com/watch?v=ptRlYs3Cp4E \
-        https://www.youtube.com/watch?v=3vqmJ9k2010 \
-        https://www.youtube.com/watch?v=VVMYqcMFEys
-
-// playback single youtube playlist
-castnow https://www.youtube.com/playlist?list=PLrIJmi5XabBPCYKEQZn9foC8MJfLGmdPz
-
-// playback multiple youtube playlists after each other
-castnow https://www.youtube.com/playlist?list=PLrIJmi5XabBPCYKEQZn9foC8MJfLGmdPz \
-        https://www.youtube.com/playlist?list=PLrIJmi5XabBPNDJ_YyC-KNa_cZ6SwTOYC
-
-// playback multiple youtube playlists and clips after each other
-castnow https://www.youtube.com/playlist?list=PLrIJmi5XabBPCYKEQZn9foC8MJfLGmdPz \
-		https://www.youtube.com/playlist?list=PLrIJmi5XabBPNDJ_YyC-KNa_cZ6SwTOYC \
-        https://www.youtube.com/watch?v=3vqmJ9k2010 \
-        https://www.youtube.com/watch?v=VVMYqcMFEys
 
 // start playback of some video over torrent
 castnow <url-to-torrent-file OR magnet>
