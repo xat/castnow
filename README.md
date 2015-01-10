@@ -21,8 +21,11 @@ castnow video1.mp4 video2.mp4 video3.mp4
 // start playback of some mp4 file over the web
 castnow http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4
 
-// start playback of some youtube clip (only audio at the moment, see #43)
+// start playback of some youtube clip
 castnow https://www.youtube.com/watch?v=pcVRrlmpcWk
+
+// playback some youtube playlist
+castnow https://www.youtube.com/playlist?list=PLrIJmi5XabBPNDJ_YyC-KNa_cZ6SwTOYC
 
 // start playback of some video over torrent
 castnow <url-to-torrent-file OR magnet>
