@@ -9,6 +9,7 @@ var circulate = require('array-loop');
 var xtend = require('xtend');
 var unformatTime = require('./utils/unformat-time');
 var debug = require('debug')('castnow');
+var debouncedSeeker = require('debounced-seeker');
 var noop = function() {};
 
 // plugins
@@ -107,29 +108,12 @@ var ctrl = function(err, p, ctx) {
     });
   }
 
-  var changeCurrentSeekCounter = (function() {
-    var currentSeekCounter = 0;
-    var currentTimeout = 0;
-    var perSeek = 30;
-    return function(increment) {
-      if (ctx.options.disableSeek) return;
-      if (increment > 0 && currentSeekCounter < 0
-          || increment < 0 && currentSeekCounter > 0)
-          currentSeekCounter = 0;
-
-      currentSeekCounter += increment;
-      if (currentTimeout !== 0) clearTimeout(currentTimeout);
-
-      currentTimeout = setTimeout(function() {
-        if (currentSeekCounter === 0) return;
-        p.getStatus(function(err, status) {
-          var timeToSeekTo = (currentSeekCounter * perSeek) + status.currentTime;
-          p.seek(timeToSeekTo);
-          currentSeekCounter = 0;
-        });
-      }, 500, p);
-    };
-  })();
+  var seek = debouncedSeeker(function(offset) {
+    if (ctx.options.disableSeek || offset === 0) return;
+    var jumpTo = Math.max(0, (p.getPosition() / 1000) + offset);
+    debug('seeking to %s', jumpTo);
+    p.seek(jumpTo);
+  }, 500);
 
   var updateTitle = function() {
     p.getStatus(function(err, status) {
@@ -149,6 +133,7 @@ var ctrl = function(err, p, ctx) {
       ui.render();
     });
   };
+
   var seekToTime = function() {
     p.getStatus(function(err, status) {
       var seconds = unformatTime(opts.seek);
@@ -156,10 +141,13 @@ var ctrl = function(err, p, ctx) {
       p.seek(seconds);
     });
   }
+
   p.on('playing', updateTitle);
+
   if (opts.seek) {
     p.once('playing', seekToTime);
   }
+
   updateTitle();
 
   var nextInPlaylist = function() {
@@ -242,12 +230,12 @@ var ctrl = function(err, p, ctx) {
 
     // Rewind, one "seekCount" per press
     left: function() {
-      changeCurrentSeekCounter(-1);
+      seek(-30);
     },
 
     // Forward, one "seekCount" per press
     right: function() {
-      changeCurrentSeekCounter(1);
+      seek(30);
     }
   };
 
