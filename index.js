@@ -110,9 +110,9 @@ var ctrl = function(err, p, ctx) {
 
   var seek = debouncedSeeker(function(offset) {
     if (ctx.options.disableSeek || offset === 0) return;
-    var jumpTo = Math.max(0, (p.getPosition() / 1000) + offset);
-    debug('seeking to %s', jumpTo);
-    p.seek(jumpTo);
+    var seconds = Math.max(0, (p.getPosition() / 1000) + offset);
+    debug('seeking to %s', seconds);
+    p.seek(seconds);
   }, 500);
 
   var updateTitle = function() {
@@ -134,18 +134,16 @@ var ctrl = function(err, p, ctx) {
     });
   };
 
-  var seekToTime = function() {
-    p.getStatus(function(err, status) {
-      var seconds = unformatTime(opts.seek);
-      debug('seeking to %o', opts.seek);
-      p.seek(seconds);
-    });
-  }
+  var initialSeek = function() {
+    var seconds = unformatTime(ctx.options.seek);
+    debug('seeking to %s', seconds);
+    p.seek(seconds);
+  };
 
   p.on('playing', updateTitle);
 
-  if (opts.seek) {
-    p.once('playing', seekToTime);
+  if (!ctx.options.disableSeek && ctx.options.seek) {
+    p.once('playing', initialSeek);
   }
 
   updateTitle();
