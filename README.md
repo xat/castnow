@@ -66,6 +66,8 @@ contains subtitles.
 
 * `--type <val>` Explicity set the mime-type of the first item in the playlist (e.g. 'video/mp4').
 
+* `--seek <val>` Seek to the specified time on start using the format hh:mm:ss or mm:ss.
+
 * `--bypass-srt-encoding` Disable automatic UTF8 encoding of SRT subtitles.
 
 * `--help` Display help message.

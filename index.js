@@ -7,6 +7,7 @@ var keypress = require('keypress');
 var ui = require('playerui')();
 var circulate = require('array-loop');
 var xtend = require('xtend');
+var unformatTime = require('./utils/unformat-time');
 var debug = require('debug')('castnow');
 var noop = function() {};
 
@@ -18,7 +19,6 @@ var youtubeplaylist = require('./plugins/youtubeplaylist');
 var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
-var unformatTime = require('./utils/unformat-time')
 
 if (opts.help) {
   return console.log([
@@ -36,7 +36,7 @@ if (opts.help) {
     '--ffmpeg-* <value>      Pass options to ffmpeg',
     '--type <val>            Explicity set the mime-type (e.g. "video/mp4")',
     '--bypass-srt-encoding   Disable automatic UTF8 encoding of SRT subtitles',
-    '--seek <value>          Seek to the specified time on start using the format hh:mm:ss',
+    '--seek <value>          Seek to the specified time on start using the format hh:mm:ss or mm:ss',
 
     '--help                  This help screen',
     '',
