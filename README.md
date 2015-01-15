@@ -1,108 +1,76 @@
-# castnow
+# castnow v0.5
 
-castnow is commandline utility which can be used to playback media files on
-your chromecast device. It supports playback of local video files, youtube
-clips, videos on the web and torrents. You can also re-attach a running
-playback session.
+In software it's often said that a codebase needs at least 2 rewrites until
+it's considered as "good" code. I hope for castnow one rewrite will do it though :)
 
-### usage
+### Why the rewrite?
 
-```
+castnow has some pain points at the moment which I think
+only can be solved nicely through an rewrite.
+Here are some:
 
-// start playback of a local video file
-castnow ./myvideo.mp4
+* Custom Plugins are not supported
+* It would be hard to build a Web-Interface based on the current code
+* The Playlist functionality is more or less a hack since it was not part of the initial idea/concept
+* When FFmpeg Transcoding is done the player controls are not supported
+* You can't mix for example YouTube Videos together with MP4 Videos in the Playlist
+* There are often crashes while playing
+* Transcoding always converts video+audio although often only transcoding of the audio-stream would be needed
 
-// start playback of video and mp3 files in the local directory
-castnow ./mydirectory/
 
-// playback 3 videos after each other
-castnow video1.mp4 video2.mp4 video3.mp4
+### v0.5 goals
 
-// start playback of some mp4 file over the web
-castnow http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4
+#### Simplicity
 
-// start playback of some youtube clip
-castnow https://www.youtube.com/watch?v=pcVRrlmpcWk
+Simplicity will stay the main focus. Someone should just need to type in `castnow <media source>`
+into his terminal and castnow then should figure out by it self how to get the given media-input
+running on Chromecast. Options like `--tomp4` or `--myip` should not be needed anymore.
 
-// playback some youtube playlist
-castnow https://www.youtube.com/playlist?list=PLrIJmi5XabBPNDJ_YyC-KNa_cZ6SwTOYC
+#### Playlist first
 
-// start playback of some video over torrent
-castnow <url-to-torrent-file OR magnet>
+Internally a Playlist will be the center of the architecture. The Playlist will communicate
+with Chromecast through some kind of Engine thing. Items in the Playlist can be moved around and the User can jump forward and backward. The Playlist can contain items
+of different types (for example youtube and some local mp4).
+You may ask yourself why this Playlist thing is so important since the Playlist will
+mostly contain just one item anyway. The answer is "Google Cast for Audio". With
+a Playlist as center of the architecture it will be easy to support stuff like .m3u
+files.
 
-// start playback of some video over torrent, with local subtitles
-castnow <url-to-torrent-file OR magnet> --subtitles </local/path/to/subtitles.srt>
+#### More Hackable
 
-// transcode some other videoformat to mp4 while playback (requires ffmpeg)
-castnow ./myvideo.avi --tomp4
+The goal here is that developers can pull in castnow as external library. For example someone could build an node-webkit (NW.js) app on top of castnow. Basicly this means the lib and bin stuff will get separated in the codebase.
 
-// re-attach to an currently running playback session
-castnow
+#### User-Plugin support
 
-```
+If someone wants to write his own plugin without modifying the castnow codebase
+he will be able todo that. The idea here is that the user can either use some
+sort of `--plugins-directory` parameter. If he does not do that, castnow will look if a directory
+`/home/<user>/.castnow/plugins` exists and load the plugins from out of there.
 
-### options
+#### Better/Smarter transcoding
 
-* `--tomp4` Transcode a video file to mp4 while playback. This option requires
-ffmpeg to be installed on your computer. The play / pause controls are currently
-not supported in transcode mode.
+castnow will detect if ffmpeg or avconv is installed and if it has the minimum
+required version. The plan is also to auto-detect if transcoding of an file is needed
+using ffprobe. If only audio needs to be transcoded castnow will not transcode video.
+Besides that the main goal is to support player controls for transcoding files (maybe
+even seeking). We will also test if it's better to transcode to .mkv instead of .mp4.
 
-* `--device "my chromecast"` If you have more than one chromecast in your network
-use the `--device` option to specify the device on which you want to start casting.
-Otherwise castnow will just use the first device it finds in the network.
+#### Robustness
 
-* `--address <IP>` The IP address of your chromecast. This will skip the MDNS scan.
+This includes stuff like handling connection losses correctly, prevent the player
+from going into idle modus if the player was paused too long and stuff like that.
 
-* `--subtitles <path/URL>` This can be a path or URL to a vtt or srt file which
-contains subtitles.
+### What happens after v0.5.x
 
-* `--myip <IP>` Your main IP address (useful if you have multiple network adapters)
+The plan is to add an minimalstic web interface with an REST API. This likely
+will happen within v0.6.x. After that, if nothing goes wrong, v1.0 is ahead :)
 
-* `--verbose` Hide the player timeline.
+### Contribution
 
-* `--peerflix-* <val>` Pass options to peerflix.
-
-* `--ffmpeg-* <val>` Pass options to ffmpeg.
-
-* `--type <val>` Explicity set the mime-type of the first item in the playlist (e.g. 'video/mp4').
-
-* `--seek <val>` Seek to the specified time on start using the format hh:mm:ss or mm:ss.
-
-* `--bypass-srt-encoding` Disable automatic UTF8 encoding of SRT subtitles.
-
-* `--help` Display help message.
-
-### player controls
-
-```
-
-space   // toggle between play and pause
-m       // toggle between mute and unmute
-up      // volume up
-down    // volume down
-left    // seek backward (keep pressed / multiple press for faster seek)
-right   // seek forward (keep pressed / multiple press for faster seek)
-n       // next item in the playlist (only supported in launch-mode)
-s       // stop playback
-q       // quit
-
-```
-
-### reporting bugs/issues
-
-Please always append the debug output to your issues. You can enable the debug messages by setting the
-DEBUG ENV variable before running the castnow-command like this: `DEBUG=castnow* castnow ./myvideo.mp4`.
-Some problems are also already addressed in our wiki https://github.com/xat/castnow/wiki.
-
-### installation
-
-`npm install castnow -g`
-
-### contributers
-
-* [tooryx](https://github.com/tooryx)
-* [przemyslawpluta](https://github.com/przemyslawpluta)
+Contributers are welcome :-)
+All I ask for is that we all agree on a similar coding style and have the same project goals in mind. I for myself love splitting up stuff in smaller functions and then compose
+them together. I'm also willing to give direct push access to people who are constantly contributing.
 
 ## License
-Copyright (c) 2014 Simon Kusterer
+Copyright (c) 2015 Simon Kusterer
 Licensed under the MIT license.
