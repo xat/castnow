@@ -43,9 +43,8 @@ The goal here is that developers can pull in castnow as external library. For ex
 #### User-Plugin support
 
 If someone wants to write his own plugin without modifying the castnow codebase
-he will be able todo that. The idea here is that the user can either use some
-sort of `--plugins-directory` parameter. If he does not do that, castnow will look if a directory
-`/home/<user>/.castnow/plugins` exists and load the plugins from out of there.
+he will be able todo that. The idea here is that the user can dynamicly
+load plugins with some sort of `--plugin` parameter (e.g. `--plugin ./myplugin.js`).
 
 #### Better/Smarter transcoding
 
