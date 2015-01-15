@@ -2,7 +2,7 @@
   "name": "castnow",
   "version": "0.5.0",
   "description": "commandline chromecast player",
-  "main": "index.js",
+  "main": "castnow.js",
   "bin": {
     "castnow": "./bin.js"
   },
@@ -26,5 +26,9 @@
     "subtitles",
     "cast"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "hoook": "^0.1.0",
+    "minimist": "^1.1.0",
+    "xtend": "^4.0.0"
+  }
 }
