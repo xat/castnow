@@ -7,16 +7,25 @@ var launchMode = !attachMode;
 var engine = castnow.getEngine();
 var pl = castnow.getPlaylist();
 
+var abort = function(message) {
+  // stop
+};
 
 if (opts.help) {
   // display help message
   return;
 }
 
+if (opts.version) {
+  // display castnow version
+  return;
+}
+
 // Load Plugins here...
 
-if (opts.scan) {
-  // list all chromecast devices found in the network
+if (opts.check) {
+  // - list all chromecast devices found in the network
+  // - check if ffmpeg is installed with an supported version
   return;
 }
 
@@ -27,8 +36,12 @@ if (launchMode) {
   });
 }
 
-castnow.connect(function(err) {
+castnow.init(function(err) {
+  if (err) return abort();
+
   if (launchMode) {
-    return pl.play();
+    return pl.init();
   }
+
+  engine.attach();
 });

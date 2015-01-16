@@ -27,6 +27,7 @@
     "cast"
   ],
   "dependencies": {
+    "express": "^4.11.0",
     "hoook": "^0.1.0",
     "minimist": "^1.1.0",
     "xtend": "^4.0.0"
