@@ -16,25 +16,32 @@ Yt.APP_ID = '233637DE';
 inherits(Yt, Api);
 
 Yt.prototype.load = function(options, cb) {
-  var youtubeId = getYouTubeId(options.path);
-  debug('loading video with id %s', youtubeId);
-  var opts = {
-    type: 'flingVideo',
-    data: {
-      currentTime: 0,
-      videoId: youtubeId
-    }
-  };
-  this.ytreq.request(opts);
+  this.ytreq.request(options);
   if (cb) cb();
 };
 
-var youtube = function(ctx, next) {
-  if (ctx.mode !== 'launch') return next();
-  if (!getYouTubeId(ctx.options.playlist[0].path)) return next();
-  debug('using youtube api');
-  ctx.api = Yt;
-  next();
+var youtube = function(castnow) {
+
+  castnow.hook('resolve', function(ev, next, stop) {
+    var item = ev.item;
+    var youtubeId = getYouTubeId(item.getSource());
+    if (!youtubeId) return next();
+    debug('youtube url detected %s', item.getSource());
+
+    item.setApi('youtube', Yt);
+
+    item.setArgs({
+      type: 'flingVideo',
+      data: {
+        currentTime: 0,
+        videoId: youtubeId
+      }
+    });
+
+    item.enable();
+    stop();
+  }, 1000);
+
 };
 
 module.exports = youtube;

@@ -11,6 +11,7 @@ var pl = castnow.getPlaylist();
 
 // plugins
 var urlPlugin = require('./plugins/url');
+var youtubePlugin = require('./plugins/youtube');
 
 var abort = function(message) {
   // stop
@@ -28,6 +29,7 @@ if (opts.version) {
 
 // Load Plugins here...
 castnow.use(urlPlugin);
+castnow.use(youtubePlugin);
 
 if (opts.check) {
   // - list all chromecast devices found in the network

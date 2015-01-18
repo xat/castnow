@@ -22,7 +22,7 @@ var url = function(castnow) {
 
     item.enable();
     stop();
-  });
+  }, 500);
 
 };
 
