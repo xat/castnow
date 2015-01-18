@@ -1,7 +1,11 @@
 var playlist = require('./lib/playlist');
 var engine = require('./lib/engine');
+var itemBuilder = require('./lib/itembuilder');
+var utils = require('./lib/utils');
 var xtend = require('xtend');
+var isArray = require('util').isArray;
 var express = require('express');
+var async = require('async');
 var hoook = require('hoook');
 var noop = function() {};
 
@@ -12,22 +16,37 @@ var defaults = {
 var castnow = function(opts) {
   var eng = engine();
   var pl = playlist(eng);
-  var initialized = false;
   var router = express.Router();
+  var uniqueId = utils.uniqueId();
   var options = xtend(defaults, opts || {});
+  var app = express();
+  var cn;
 
-  return xtend({
+  var flatten = function(input, cb) {
+    if (!cb) cb = noop;
+    // the flatten-hook can be used to extract
+    // the items of a playlist-like input (e.g. .m3u)
+    cn.fire('flatten',  { input: input },
+      function(err, ev) {
+        if (err) return cb(err);
+        cb(null, isArray(ev.input) ? ev.input : [ev.input]);
+      }
+    );
+  };
 
-    init: function(cb) {
-      if (!cb) cb = noop;
-      if (initialized) return cb(new Error('already initialized'));
-      this.fire('init', function() {
-        var app = express();
-        app.use(router);
-        app.listen(options.port);
-        cb();
-      });
-    },
+  var resolver = function(input, cb) {
+    if (!cb) cb = noop;
+    var item = itemBuilder(uniqueId(), input);
+    cn.fire('resolve', { item: item }, function(err, cb) {
+      if (err) return cb(err);
+      cb(null, ev.item);
+    });
+  };
+
+  app.use(router);
+  app.listen(options.port);
+
+  return cn = xtend({
 
     getEngine: function() {
       return eng;
@@ -46,6 +65,25 @@ var castnow = function(opts) {
     // connect to chromecast
     connect: function() {
       eng.connect.apply(null, arguments);
+    },
+
+    // resolve is used to transform some input
+    // into an item that can be added to the
+    // playlist
+    resolve: function(input, cb) {
+      if (!cb) cb = noop;
+      var that = this;
+      var inputs = isArray(input) ? input : [input];
+
+      async.concat(inputs, flatten, function(err, list) {
+        if (err) cb(err);
+        async.mapSeries(list, resolver, function(err, items) {
+          if (err) return cb(err);
+          items = items.filter(function(item) {
+            return !item.isDisabled();
+          });
+        });
+      });
     },
 
     // register a plugin

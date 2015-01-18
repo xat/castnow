@@ -27,6 +27,8 @@
     "cast"
   ],
   "dependencies": {
+    "async": "^0.9.0",
+    "chromecast-player": "^0.1.7",
     "express": "^4.11.0",
     "hoook": "^0.1.0",
     "minimist": "^1.1.0",

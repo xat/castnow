@@ -30,18 +30,12 @@ if (opts.check) {
 }
 
 if (launchMode) {
-  // add items to playlist
-  opts._.forEach(function(path) {
-    pl.add(path);
+  castnow.resolve(opts._, function(err, items) {
+    if (err) return;
+    pl.append.apply(pl, items);
+    castnow.connect('', function(err) {
+      if (err) return;
+      pl.load();
+    });
   });
 }
-
-castnow.init(function(err) {
-  if (err) return abort();
-
-  if (launchMode) {
-    return pl.init();
-  }
-
-  engine.attach();
-});
