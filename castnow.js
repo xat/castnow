@@ -44,10 +44,8 @@ var castnow = function(opts) {
     });
   };
 
-  process.nextTick(function() {
-    app.use(router);
-    app.listen(options.port);
-  });
+  app.use(router);
+  app.listen(options.port);
 
   return cn = xtend({
 
