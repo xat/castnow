@@ -7,15 +7,18 @@ var pl = castnow.getPlaylist();
 // plugins
 var urlPlugin = require('../plugins/url');
 var youtubePlugin = require('../plugins/youtube');
+var youtubePlaylistPlugin = require('../plugins/youtubeplaylist');
 
 // register plugins
 castnow.use(urlPlugin);
 castnow.use(youtubePlugin);
+castnow.use(youtubePlaylistPlugin);
 
 var list = [
   'https://www.youtube.com/watch?v=JskztPPSJwY',
   'http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4',
-  'https://www.youtube.com/watch?v=pcVRrlmpcWk'
+  'https://www.youtube.com/watch?v=pcVRrlmpcWk',
+  'https://www.youtube.com/playlist?list=PLrIJmi5XabBPNDJ_YyC-KNa_cZ6SwTOYC'
 ];
 
 castnow.resolve(list, function(err, items) {

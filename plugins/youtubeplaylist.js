@@ -1,72 +1,48 @@
-var url = require('url');
 var got = require('got');
-var qs = require('query-string');
 var parser = require('xml2js').parseString;
 var debug = require('debug')('castnow:youtubeplaylist');
+var queryExtend = require('query-extend');
 
-function getPlaylistItems(id, callback) {
+var getYoutubeItemUrl = function(id) {
+  return 'https://www.youtube.com/watch?v=' + id;
+};
 
-  got('https://gdata.youtube.com/feeds/api/playlists/' + id + '?v=2&max-results=50', function get(err, data, res) {
+var getApiUrl = function(id) {
+  return 'https://gdata.youtube.com/feeds/api/playlists/' + id + '?v=2&max-results=50';
+};
 
-    var videos = [];
+var isYoutubePlaylist = function(input) {
+  return /youtube/.test(input) && /playlist\?list/.test(input);
+};
 
-    if (!err && res.statusCode === 200) {
-      return parser(data, { normalizeTags: true, explicitArray: true }, function parse(err, result) {
+var getListId = function(url) {
+  return queryExtend(url, true).list;
+};
 
-        var i;
-
-        for (i = 0; i < result.feed.entry.length; i++) {
-          videos.push({path: 'https://www.youtube.com/watch?v=' + result.feed.entry[i]['media:group'][0]['yt:videoid']});
-        }
-
-        callback(videos);
-
+var getPlaylistItems = function(id, cb) {
+  got(getApiUrl(id), function get(err, data, res) {
+    if (err || res.statusCode !== 200) return cb(null, [])
+    parser(data, { normalizeTags: true, explicitArray: true }, function(err, result) {
+      if (err) return cb(null, []);
+      var videos = result.feed.entry.map(function(entry) {
+        return getYoutubeItemUrl(entry['media:group'][0]['yt:videoid']);
       });
-    }
-
-    if (err) { console.log(err.stack); }
-
-    callback(videos);
-
+      cb(null, videos);
+    });
   });
+};
 
-}
+var youtubePlaylist = function(castnow) {
 
-function updatePlaylist(stash, ctx, next) {
-  var out = [], i;
+  castnow.hook('flatten', function(ev, next, stop) {
+    var input = ev.input;
+    if (!isYoutubePlaylist(input)) return next();
 
-  for (i = 0; i < ctx.options.playlist.length; i++) {
-    if (!stash[ctx.options.playlist[i]]) {
-        out.push(ctx.options.playlist[i]);
-    } else {
-        out = out.concat(stash[ctx.options.playlist[i]]);
-    }
-  }
-  ctx.options.playlist = out;
-  next();
-}
+    debug('youtube playlist detected %s', input);
 
-var youtubePlaylist = function youtubePlaylist(ctx, next) {
-
-  if (ctx.mode !== 'launch') return next();
-
-  var items = [], stash = {}, count = 0, i;
-
-  for (i = 0; i < ctx.options.playlist.length; i++) {
-      if (/youtube/.test(ctx.options.playlist[i].path) && /playlist\?list/.test(ctx.options.playlist[i].path)) {
-        debug('loading youtube playlist %s', ctx.options.playlist[i].path);
-        items.push(qs.parse(url.parse(ctx.options.playlist[i].path).query).list);
-        ctx.options.playlist[i] = items.length;
-      }
-  }
-
-  if (!items.length) return next();
-
-  items.forEach(function grabDetails(item) {
-    getPlaylistItems(item, function get(found) {
-      count = count + 1;
-      stash[count] = found;
-      if (count === items.length) { updatePlaylist(stash, ctx, next); }
+    getPlaylistItems(getListId(input), function(err, videos) {
+      ev.input = videos;
+      stop();
     });
   });
 
