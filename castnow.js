@@ -18,7 +18,7 @@ var castnow = function(opts) {
   var eng = engine();
   var pl = playlist(eng);
   var router = express.Router();
-  var uniqueId = utils.uniqueId();
+  var uniqueId = utils.uniqueId(1);
   var options = xtend(defaults, opts || {});
   var app = express();
   var cn;
@@ -44,8 +44,10 @@ var castnow = function(opts) {
     });
   };
 
-  app.use(router);
-  app.listen(options.port);
+  process.nextTick(function() {
+    app.use(router);
+    app.listen(options.port);
+  });
 
   return cn = xtend({
 
@@ -86,6 +88,10 @@ var castnow = function(opts) {
           cb(null, items);
         });
       });
+    },
+
+    getOptions: function() {
+      return options;
     },
 
     // register a plugin

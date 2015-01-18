@@ -1,53 +1,50 @@
 var http = require('http');
 var internalIp = require('internal-ip');
-var router = require('router');
 var path = require('path');
-var serveMp4 = require('../utils/serve-mp4');
+var serveMp4 = require('../lib/serve-mp4');
 var debug = require('debug')('castnow:localfile');
 var fs = require('fs');
-var port = 4100;
 
-var isFile = function(item) {
-  return fs.existsSync(item.path) && fs.statSync(item.path).isFile();
+var isFile = function(path) {
+  return fs.existsSync(path) && fs.statSync(path).isFile();
 };
 
-var contains = function(arr, cb) {
-  for (var i=0, len=arr.length; i<len; i++) {
-    if (cb(arr[i], i)) return true;
-  }
-  return false;
-};
+var localfile = function(castnow) {
+  var options = castnow.getOptions();
+  var router = castnow.getRouter();
+  var playlist = castnow.getPlaylist();
+  var ip = options.ip || internalIp();
 
-var localfile = function(ctx, next) {
-  if (ctx.mode !== 'launch') return next();
-  if (!contains(ctx.options.playlist, isFile)) return next();
+  router.get('/localfile/:id', function(req, res) {
+    var item = playlist.findItem(parseInt(req.params.id, 10));
+    if (!item) return res.sendStatus(404);
+    debug('incoming request serving %s', item.getSource());
+    serveMp4(req, res, item.getSource());
+  });
 
-  var route = router();
-  var list = ctx.options.playlist.slice(0);
-  var ip = (ctx.options.myip || internalIp());
+  castnow.hook('resolve', function(ev, next, stop) {
+    var item = ev.item;
+    if (!isFile(item.getSource())) return next();
+    var url = 'http://' + ip + ':' + options.port + '/localfile/' + item.getId();
 
-  ctx.options.playlist = list.map(function(item, idx) {
-    if (!isFile(item)) return item;
-    return {
-      path: 'http://' + ip + ':' + port + '/' + idx,
-      type: 'video/mp4',
+    debug('localfile detected: %s url: %s', item.getSource(), url);
+
+    item.setArgs({
+      autoplay: true,
+      currentTime: 0,
       media: {
+        contentId: url,
+        contentType: 'video/mp4',
+        streamType: 'BUFFERED',
         metadata: {
-          title: path.basename(item.path)
+          title: path.basename(item.getSource())
         }
       }
-    };
-  });
+    });
 
-  route.all('/{idx}', function(req, res) {
-    debug('incoming request serving %s', list[req.params.idx].path);
-    serveMp4(req, res, list[req.params.idx].path);
-  });
-
-  http.createServer(route).listen(port);
-  debug('started webserver on address %s using port %s', ip, port);
-  next();
-
+    item.enable();
+    stop();
+  }, 600);
 };
 
 module.exports = localfile;

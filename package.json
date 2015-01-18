@@ -27,6 +27,7 @@
     "cast"
   ],
   "dependencies": {
+    "array-find": "^0.1.1",
     "async": "^0.9.0",
     "castv2-client": "0.0.8",
     "chromecast-player": "^0.1.7",
@@ -36,10 +37,13 @@
     "get-youtube-id": "^0.1.3",
     "got": "^2.3.0",
     "hoook": "^0.1.0",
+    "internal-ip": "^1.0.0",
     "is-url": "^1.2.0",
     "keypress": "^0.2.1",
+    "mime": "^1.2.11",
     "minimist": "^1.1.0",
     "query-extend": "^0.1.4",
+    "range-parser": "^1.0.2",
     "xml2js": "^0.4.4",
     "xtend": "^4.0.0"
   }
