@@ -7,6 +7,7 @@ var isArray = require('util').isArray;
 var express = require('express');
 var async = require('async');
 var hoook = require('hoook');
+var debug = require('debug')('castnow');
 var noop = function() {};
 
 var defaults = {
@@ -37,7 +38,7 @@ var castnow = function(opts) {
   var resolver = function(input, cb) {
     if (!cb) cb = noop;
     var item = itemBuilder(uniqueId(), input);
-    cn.fire('resolve', { item: item }, function(err, cb) {
+    cn.fire('resolve', { item: item }, function(err, ev) {
       if (err) return cb(err);
       cb(null, ev.item);
     });
@@ -82,6 +83,7 @@ var castnow = function(opts) {
           items = items.filter(function(item) {
             return !item.isDisabled();
           });
+          cb(null, items);
         });
       });
     },

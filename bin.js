@@ -4,8 +4,13 @@ var castnow = require('./castnow')();
 var opts = require('minimist')(process.argv.slice(2));
 var attachMode = !opts._.length;
 var launchMode = !attachMode;
+var scanner = require('chromecast-scanner');
+var debug = require('debug')('castnow:bin');
 var engine = castnow.getEngine();
 var pl = castnow.getPlaylist();
+
+// plugins
+var urlPlugin = require('./plugins/url');
 
 var abort = function(message) {
   // stop
@@ -22,6 +27,7 @@ if (opts.version) {
 }
 
 // Load Plugins here...
+castnow.use(urlPlugin);
 
 if (opts.check) {
   // - list all chromecast devices found in the network
@@ -30,12 +36,22 @@ if (opts.check) {
 }
 
 if (launchMode) {
+  debug('launch mode');
   castnow.resolve(opts._, function(err, items) {
-    if (err) return;
+    if (err) return debug('error resolving items');
     pl.append.apply(pl, items);
-    castnow.connect('', function(err) {
-      if (err) return;
-      pl.load();
+    debug('appended items to playlist %s', items.length);
+    scanner(function(err, service) {
+      if (err) return debug('chromecast not found');
+      debug('found chromecast running with address %s', service.address);
+      castnow.connect(service.address, function(err) {
+        if (err) return debug('chromecast connection failed');
+        // load first item in playlist
+        pl.load(0, function(err, item, controls) {
+          if (err) return debug('load failed with error: %s', err.message);
+          debug('load succeeded');
+        });
+      });
     });
   });
 }
