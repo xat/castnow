@@ -1,48 +1,38 @@
-var fs = require('fs-extended');
+var fs = require('fs');
 var path = require('path');
+var xtend = require('xtend');
 var join = path.join;
 var extname = path.extname;
 var debug = require('debug')('castnow:directories');
 
-var acceptedExtensions = {
-  '.mp3': true,
-  '.mp4': true
+var defaults = {
+  extensions: ['.mp3', '.mp4']
 };
 
-function filter(filePath) {
-  return !!acceptedExtensions[extname(filePath)];
-}
-
-var isDir = function(item) {
-  return fs.existsSync(item.path) && fs.lstatSync(item.path).isDirectory();
+var isDir = function(path) {
+  return fs.existsSync(path) && fs.lstatSync(path).isDirectory();
 };
 
-// check which items in the playlist are
-// actually directories and get all mp4 and
-// mp3 files out of those.
-var flattenFiles = function(playlist) {
-  var items = [];
-  playlist.forEach(function(item) {
-    if (isDir(item)) {
-      debug('directory found: %s', item.path);
-      var mediaFiles = fs.listFilesSync(item.path, { filter: filter });
-      items.push.apply(items, mediaFiles.map(function(file) {
-        debug('added file %s from directory %s', file, item.path);
-        return {
-          path: join(item.path, file)
-        };
-      }));
-      return;
-    }
-    items.push(item);
-  });
-  return items;
-};
+var directories = function(opts) {
+  var options = xtend(defaults, opts || {});
 
-var directories = function(ctx, next) {
-  if (ctx.mode !== 'launch') return next();
-  ctx.options.playlist = flattenFiles(ctx.options.playlist);
-  next();
+  var filterByExt = function(filePath) {
+    return options.extensions.indexOf(extname(filePath).toLowerCase()) > -1;
+  };
+
+  return function(castnow) {
+    castnow.hook('flatten', function(ev, next, stop) {
+      if (!isDir(ev.input)) return next();
+      debug('directory found: %s', ev.input);
+      var files = fs.readdirSync(ev.input)
+        .filter(filterByExt)
+        .map(function(filename) {
+          return join(ev.input, filename);
+        });
+      ev.input = files;
+      stop();
+    });
+  };
 };
 
 module.exports = directories;

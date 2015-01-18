@@ -14,6 +14,7 @@ var urlPlugin = require('./plugins/url');
 var youtubePlugin = require('./plugins/youtube');
 var youtubePlaylistPlugin = require('./plugins/youtubeplaylist');
 var localfilePlugin = require('./plugins/localfile');
+var directoriesPlugin = require('./plugins/directories');
 
 var abort = function(message) {
   // stop
@@ -34,6 +35,7 @@ castnow.use(urlPlugin);
 castnow.use(localfilePlugin);
 castnow.use(youtubePlugin);
 castnow.use(youtubePlaylistPlugin);
+castnow.use(directoriesPlugin());
 
 if (opts.check) {
   // - list all chromecast devices found in the network
