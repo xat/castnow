@@ -6,6 +6,7 @@ var pl = castnow.getPlaylist();
 
 // plugins
 var urlPlugin = require('../plugins/url');
+var torrentPlugin = require('../plugins/torrent');
 var youtubePlugin = require('../plugins/youtube');
 var youtubePlaylistPlugin = require('../plugins/youtubeplaylist');
 
@@ -13,6 +14,7 @@ var youtubePlaylistPlugin = require('../plugins/youtubeplaylist');
 castnow.use(urlPlugin);
 castnow.use(youtubePlugin);
 castnow.use(youtubePlaylistPlugin);
+castnow.use(torrentPlugin);
 
 var list = [
   'https://www.youtube.com/watch?v=JskztPPSJwY',

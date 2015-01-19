@@ -41,9 +41,11 @@
     "is-url": "^1.2.0",
     "keypress": "^0.2.1",
     "mime": "^1.2.11",
-    "minimist": "^1.1.0",
+    "pump": "^1.0.0",
     "query-extend": "^0.1.4",
     "range-parser": "^1.0.2",
+    "read-torrent": "^1.2.0",
+    "torrent-stream": "^0.16.2",
     "xml2js": "^0.4.4",
     "xtend": "^4.0.0"
   }
