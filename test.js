@@ -2,42 +2,14 @@ var test = require('tape');
 var castnow = require('./castnow')();
 var ENGINE_STATES = require('./lib/engine').STATES;
 var scanner = require('chromecast-scanner');
-var Api = require('chromecast-player').api;
+var urlPlugin = require('./plugins/url');
 var async = require('async');
+var demo = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4';
 
+castnow.use(urlPlugin);
 
 test('castnow engine', function(t) {
   var engine = castnow.getEngine();
-
-  var item = {
-
-    getAppId: function() {
-      return Api.APP_ID;
-    },
-
-    getApi: function() {
-      return Api;
-    },
-
-    load: function(controls, cb) {
-      controls.load({
-        autoplay: true,
-        currentTime: 0,
-        media: {
-          contentId: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4',
-          contentType: 'video/mp4',
-          streamType: 'BUFFERED'
-        }
-      }, cb);
-    },
-
-    unload: function(controls, cb) {
-      if (controls.destroy) controls.destroy();
-      t.pass('item unloaded');
-      cb();
-    }
-
-  };
 
   async.waterfall([
     function(next) {
@@ -56,14 +28,20 @@ test('castnow engine', function(t) {
     },
 
     function(next) {
-      engine.load(item, function(err, controls, item) {
-        t.equal(err, null, 'there should not be any load error');
-        t.equal(engine.getState(), ENGINE_STATES.launched, 'engine should be in launch state')
-        next();
+      castnow.createItem('url', demo, function(err, item) {
+        next(null, item);
       });
     },
 
-    function(next) {
+    function(item, next) {
+      engine.load(item, function(err) {
+        t.equal(err, null, 'there should not be any load error');
+        t.equal(engine.getState(), ENGINE_STATES.launched, 'engine should be in launch state')
+        next(null, item);
+      });
+    },
+
+    function(item, next) {
       setTimeout(function() {
         engine.load(item, function() {
           next();

@@ -2,26 +2,47 @@ var isUrl = require('is-url');
 var debug = require('debug')('castnow:url');
 
 var url = function(castnow) {
-  var playlist = castnow.getPlaylist();
 
-  castnow.hook('resolve', function(ev, done, stop) {
-    var item = ev.item;
-    if (!isUrl(item.getSource())) return done();
+  castnow.addItemCreator('url', function(o, cb) {
+    var opts = {};
+    var item;
+    var url;
 
-    debug('url detected', item.getSource());
+    if (typeof o === 'string') {
+      opts.source = o;
+    } else {
+      opts = o;
+    }
+
+    if (!isUrl(opts.source)) return cb(new Error('not a valid url'));
+
+    item = castnow.createBlankItem();
+    item.setSource(opts.source);
 
     item.setArgs({
       autoplay: true,
-      currentTime: 0,
+      currentTime: opts.start || 0,
       media: {
-        contentId: item.getSource(),
+        contentId: opts.source,
         contentType: 'video/mp4',
         streamType: 'BUFFERED'
       }
     });
 
-    item.enable();
-    stop();
+    return cb(null, item);
+  });
+
+  castnow.hook('resolve', function(ev, done, stop) {
+    var input = ev.input;
+    if (!isUrl(item.source)) return done();
+
+    debug('url detected', item.source);
+
+    castnow.createItem('url', input, function(err, item) {
+      if (err) return stop(err);
+      ev.item = item;
+      return stop();
+    });
   }, 500);
 
 };

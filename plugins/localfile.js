@@ -22,16 +22,27 @@ var localfile = function(castnow) {
     serveMp4(req, res, item.getSource());
   });
 
-  castnow.hook('resolve', function(ev, next, stop) {
-    var item = ev.item;
-    if (!isFile(item.getSource())) return next();
-    var url = 'http://' + ip + ':' + options.port + '/localfile/' + item.getId();
+  castnow.addItemCreator('localfile', function(o, cb) {
+    var opts = {};
+    var item;
+    var url;
 
-    debug('localfile detected: %s url: %s', item.getSource(), url);
+    if (typeof o === 'string') {
+      opts.source = o;
+    } else {
+      opts = o;
+    }
+
+    if (!isFile(opts.source)) return cb(new Error('not a valid file'));
+
+    item = castnow.createBlankItem();
+    item.setSource(opts.source);
+
+    url = 'http://' + ip + ':' + options.port + '/localfile/' + item.getId();
 
     item.setArgs({
       autoplay: true,
-      currentTime: 0,
+      currentTime: opts.start || 0,
       media: {
         contentId: url,
         contentType: 'video/mp4',
@@ -41,9 +52,17 @@ var localfile = function(castnow) {
         }
       }
     });
+  });
 
-    item.enable();
-    stop();
+  castnow.hook('resolve', function(ev, next, stop) {
+    var input = ev.input;
+    if (!isFile(input.source)) return next();
+    debug('localfile detected: %s', source);
+    castnow.createItem('localfile', input, function(err, item) {
+      if (err) return stop(err);
+      ev.item = item;
+      return stop();
+    });
   }, 600);
 };
 

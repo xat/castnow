@@ -21,6 +21,8 @@ var castnow = function(opts) {
   var uniqueId = utils.uniqueId(1);
   var options = xtend(defaults, opts || {});
   var app = express();
+  var flatteners = {};
+  var itemCreators = {};
   var cn;
 
   var flatten = function(input, cb) {
@@ -37,10 +39,9 @@ var castnow = function(opts) {
 
   var resolver = function(input, cb) {
     if (!cb) cb = noop;
-    var item = itemBuilder(uniqueId(), input);
-    cn.fire('resolve', { item: item }, function(err, ev) {
+    cn.fire('resolve', input, function(err, ev) {
       if (err) return cb(err);
-      cb(null, ev.item);
+      cb(null, ev.item || null);
     });
   };
 
@@ -81,7 +82,7 @@ var castnow = function(opts) {
         async.mapSeries(list, resolver, function(err, items) {
           if (err) return cb(err);
           items = items.filter(function(item) {
-            return !item.isDisabled();
+            return !!item;
           });
           cb(null, items);
         });
@@ -90,6 +91,28 @@ var castnow = function(opts) {
 
     getOptions: function() {
       return options;
+    },
+
+    createBlankItem: function() {
+      return itemBuilder(uniqueId());
+    },
+
+    createItem: function(name, options, cb) {
+      if (!itemCreators[name]) return cb(new Error('creator not found'));
+      itemCreators[name](options, cb);
+    },
+
+    flatten: function(name, options, cb) {
+      if (!flatteners[name]) return cb(new Error('flattener not found'));
+      flatteners[name](options, cb);
+    },
+
+    addItemCreator: function(name, fn) {
+      itemCreators[name] = fn;
+    },
+
+    addFlattener: function(name, fn) {
+      flattener[name] = fn;
     },
 
     // register a plugin
