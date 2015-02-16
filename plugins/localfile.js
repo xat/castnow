@@ -40,6 +40,10 @@ var localfile = function(ctx, next) {
   });
 
   route.all('/{idx}', function(req, res) {
+    if (!list[req.params.idx]) {
+      res.statusCode = '404';
+      return res.end('page not found');
+    }
     debug('incoming request serving %s', list[req.params.idx].path);
     serveMp4(req, res, list[req.params.idx].path);
   });
