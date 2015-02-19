@@ -38,7 +38,6 @@ if (opts.help) {
     '--type <val>            Explicity set the mime-type (e.g. "video/mp4")',
     '--bypass-srt-encoding   Disable automatic UTF8 encoding of SRT subtitles',
     '--seek <value>          Seek to the specified time on start using the format hh:mm:ss or mm:ss',
-    '--ssdp                  Use SSDP instead of MDNS for scanning',
 
     '--help                  This help screen',
     '',
@@ -70,11 +69,6 @@ delete opts._;
 
 if (opts.verbose || process.env.DEBUG) {
   ui.hide();
-}
-
-if (opts.ssdp) {
-  delete opts.ssdp;
-  opts.scanType = 'ssdp';
 }
 
 ui.showLabels('state');

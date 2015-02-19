@@ -70,8 +70,6 @@ contains subtitles.
 
 * `--bypass-srt-encoding` Disable automatic UTF8 encoding of SRT subtitles.
 
-* `--ssdp` Use SSDP instead of MDNS for scanning.
-
 * `--help` Display help message.
 
 ### player controls
