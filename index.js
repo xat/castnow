@@ -84,6 +84,7 @@ var last = function(fn, l) {
 
 var ctrl = function(err, p, ctx) {
   if (err) {
+    ui.hide();
     debug('player error: %o', err);
     console.log(chalk.red(err));
     process.exit();
