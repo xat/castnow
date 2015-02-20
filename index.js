@@ -32,7 +32,7 @@ if (opts.help) {
     '--address <ip>          The IP address of your chromecast device',
     '--subtitles <path/url>  Path or URL to an SRT or VTT file',
     '--myip <ip>             Your main IP address',
-    '--verbose               No output',
+    '--quiet               No output',
     '--peerflix-* <value>    Pass options to peerflix',
     '--ffmpeg-* <value>      Pass options to ffmpeg',
     '--type <val>            Explicity set the mime-type (e.g. "video/mp4")',
@@ -67,7 +67,7 @@ if (opts._.length) {
 
 delete opts._;
 
-if (opts.verbose || process.env.DEBUG) {
+if (opts.quiet || process.env.DEBUG) {
   ui.hide();
 }
 

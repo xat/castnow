@@ -58,7 +58,7 @@ contains subtitles.
 
 * `--myip <IP>` Your main IP address (useful if you have multiple network adapters)
 
-* `--verbose` Hide the player timeline.
+* `--quiet` Hide the player timeline.
 
 * `--peerflix-* <val>` Pass options to peerflix.
 
