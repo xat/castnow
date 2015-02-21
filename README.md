@@ -104,5 +104,5 @@ Some problems are also already addressed in our wiki https://github.com/xat/cast
 * [przemyslawpluta](https://github.com/przemyslawpluta)
 
 ## License
-Copyright (c) 2014 Simon Kusterer
+Copyright (c) 2015 Simon Kusterer
 Licensed under the MIT license.
