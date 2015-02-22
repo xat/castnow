@@ -97,6 +97,12 @@ var ctrl = function(err, p, ctx) {
   process.stdin.setRawMode(true);
   process.stdin.resume();
 
+  ctx.once('closed', function() {
+    ui.hide();
+    console.log(chalk.red('lost connection'));
+    process.exit();
+  });
+
   // get initial volume
   p.getVolume(function(err, status) {
     volume = status;
