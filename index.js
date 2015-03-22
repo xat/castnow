@@ -124,7 +124,7 @@ var ctrl = function(err, p, ctx) {
 
   var updateTitle = function() {
     p.getStatus(function(err, status) {
-      if (!status.media ||
+      if (!status || !status.media ||
           !status.media.metadata ||
           !status.media.metadata.title) return;
 
