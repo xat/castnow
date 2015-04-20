@@ -187,7 +187,9 @@ var ctrl = function(err, p, ctx) {
 
     // toggle between mute / unmute
     m: function() {
-      if (volume.muted) {
+      if(!volume) { 
+        return; 
+      } else if (volume.muted) {
         p.unmute(function(err, status) {
           if (err) return;
           volume = status;
@@ -202,7 +204,7 @@ var ctrl = function(err, p, ctx) {
 
     // volume up
     up: function() {
-      if (volume.level >= 1) return;
+      if (!volume || volume.level >= 1) return;
       p.setVolume(Math.min(volume.level + 0.05, 1), function(err, status) {
         if (err) return;
         volume = status;
@@ -211,7 +213,7 @@ var ctrl = function(err, p, ctx) {
 
     // volume down
     down: function() {
-      if (volume.level <= 0) return;
+      if (!volume || volume.level <= 0) return;
       p.setVolume(Math.max(volume.level - 0.05, 0), function(err, status) {
         if (err) return;
         volume = status;
