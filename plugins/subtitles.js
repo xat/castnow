@@ -29,6 +29,19 @@ var attachSubtitles = function(ctx) {
   if (!ctx.options.playlist[0].media) {
     ctx.options.playlist[0].media = {};
   }
+  ctx.options.playlist[0].media.textTrackStyle = {
+    backgroundColor: '#00000000',
+    foregroundColor: '#FFFF00FF',
+    edgeType: 'OUTLINE',
+    edgeColor: '#000000FF',
+    fontScale: 1,
+    fontStyle: 'NORMAL',
+    fontFamily: 'Droid Sans',
+    fontGenericFamily: 'SANS_SERIF',
+    windowColor: '#AA00FFFF',
+    windowRoundedCornerRadius: 10,
+    windowType: 'NONE'
+  };
   ctx.options.playlist[0].media.tracks = [{
     trackId: 1,
     type: 'TEXT',
