@@ -1,0 +1,33 @@
+/description>
+<content:encoded>
+<![CDATA[
+<p>We are proud to announce the integration of several popular cloud IDEs into the Bitbucket experience. You are already managing, building, and deploying your code to the cloud; you can now code in the cloud as well. Your personally-configured cloud IDE and dev environments are now accessible to you on any machine anywhere, all connected to, and, most importantly, integrated with the familiar Bitbucket interface.</p> <p>Today, we are launching integrations with Codio and Codeanywhere, since they meet Atlassian&#8217;s standards of quality and security. Integrations with other cloud IDE vendors will be available soon. You can now click on the repository view of Bitbucket to clone and edit files directly in Codio or Codeanywhere:</p> <p><a href="https://blog.bitbucket.org/files/2015/02/edit-in-codio-screenshot.png" rel="lightbox[2427]"><img class="alignnone size-full wp-image-2429" src="https://blog.bitbucket.org/files/2015/02/edit-in-codio-screenshot.png" alt="edit-in-codio-screenshot" width="279" height="307" /></a></p> <p>Cloud IDEs have come a long way in the past few years. The IDEs we have chosen to integrate with Bitbucket are solid, full-fledged development environments with desktop-quality coding experiences: resizing, context-coloring, navigation, and responsiveness. We believe that many developers will appreciate the code editing features, as well as the more advanced features of some of our partner cloud IDEs &#8211; automatic configuration of code libraries and build server &amp; deployment integrations.</p> <p><a href="https://blog.bitbucket.org/files/2015/02/find-new-addons-page-screenshot.png" rel="lightbox[2427]"><img class="alignleft wp-image-2428" src="https://blog.bitbucket.org/files/2015/02/find-new-addons-page-screenshot.png" alt="find-new-addons-page-screenshot" width="600" height="312" /></a></p> <p>Cloud IDE integration is a one-click process. Just select the IDE partner of your choice from your Bitbucket users settings and authenticate. Bitbucket’s repository view page will now contain an additional option in the &#8216;develop&#8217; menu: Open in your cloud IDE (&#8216;Open in Codio&#8217;, for example).</p> <p><strong>More about our launch partners</strong></p> <p><a href="https://blog.bitbucket.org/files/2015/02/codio-logo-dark.png" rel="lightbox[2427]"><img class="alignleft wp-image-2430" src="https://blog.bitbucket.org/files/2015/02/codio-logo-dark-300x114.png" alt="codio-logo-dark" width="150" height="57" /></a></p> <p><strong>Codio</strong></p> <p>Codio is the cloud-based IDE and publishing platform for teaching computer programming and computer science in schools, universities, and the vocational education sector worldwide.</p> <p>Codio provides instant coding environments featuring rich code editing, a large portfolio of programming languages &amp; other software components, dedicated virtual servers, advanced features for student administration, and a growing library of course content resources, all accessible anywhere through any browser.</p> <blockquote><p><em>&#8220;Codio has always focused on delighting users with instant access anywhere to a powerful web IDE, and with today&#8217;s integration we&#8217;re thrilled to extend that experience to Bitbucket.&#8221;</em></p></blockquote> <p>&#8211; Freddy May, CEO and founder, Codio.</p> <p><a href="https://blog.bitbucket.org/files/2015/02/codeanywhere_logo.jpg" rel="lightbox[2427]"><img class="alignnone size-full wp-image-2431" src="https://blog.bitbucket.org/files/2015/02/codeanywhere_logo.jpg" alt="codeanywhere_logo" width="200" height="52" /></a></p> <p><strong>Codeanywhere</strong><br /> Collaboration platform for developers. Codeanywhere’s powerful web IDE has all the features of a Desktop IDE but with additional features only a cloud application can give you.</p> <blockquote><p><em>&#8220;When Codeanywhere was just starting out, connecting to Bitbucket was one of the first feature requests our users had. Today I am ecstatic that Bitbucket will be integrating Codeanywhere, allowing their users to easily and seamlessly edit and write code, from anywhere.&#8221;</em></p></blockquote> <p>&#8211; Ivan Burazin, CEO, Codeanywhere.</p>
+]]>
+</content:encoded>
+<wfw:commentRss>
+http://blog.bitbucket.org/2015/02/11/coding-in-the-cloud-with-bitbucket/feed/
+</wfw:commentRss>
+<slash:comments>9</slash:comments>
+</item>
+<item>
+<title>Bitbucket: 2014 in review</title>
+<link>
+http://blog.bitbucket.org/2015/02/05/bitbucket-2014-in-review/
+</link>
+<comments>
+http://blog.bitbucket.org/2015/02/05/bitbucket-2014-in-review/#comments
+</comments>
+<pubDate>Thu, 05 Feb 2015 15:00:22 +0000</pubDate>
+<dc:creator>
+<![CDATA[ Raj Sarkar ]]>
+</dc:creator>
+<category>
+<![CDATA[ atlassian ]]>
+</category>
+<category>
+<![CDATA[ bitbucket ]]>
+</category>
+<guid isPermaLink="false">https://blog.bitbucket.org/?p=2412</guid>
+<description>
+<![CDATA[
+Congrats to the New England Patriots for winning the Super Bowl. And what a heartbreaker for fans of the Seattle Seahawks! But it was a very close game and it could have gone either way. Both teams have a lot to celebrate. Just like any good football team reflects on their accomplishments at the end of the season, the Bitbucket team has a lot to celebrate, too. So we thought it
