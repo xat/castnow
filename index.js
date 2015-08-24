@@ -16,7 +16,6 @@ var noop = function() {};
 var directories = require('./plugins/directories');
 var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
-var youtubeplaylist = require('./plugins/youtubeplaylist');
 var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');

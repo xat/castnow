@@ -24,9 +24,6 @@ castnow http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4
 // start playback of some youtube clip
 castnow https://www.youtube.com/watch?v=pcVRrlmpcWk
 
-// playback some youtube playlist
-castnow https://www.youtube.com/playlist?list=PLrIJmi5XabBPNDJ_YyC-KNa_cZ6SwTOYC
-
 // start playback of some video over torrent
 castnow <url-to-torrent-file OR magnet>
 
