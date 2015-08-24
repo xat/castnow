@@ -5,6 +5,13 @@ your chromecast device. It supports playback of local video files, youtube
 clips, videos on the web and torrents. You can also re-attach a running
 playback session.
 
+### interested in beeing a castnow maintainer?
+
+I currently don't have that much time to maintain this project and also lost some interest (to be honest).
+Main reason is that we have a new TV since a few months which supports casting to it directly using
+DLNA (you may wanna checkout [dlnacast](https://github.com/xat/dlnacast)).
+Feel free to contact me ( [simon@sope.io](simon@sope.io) ) if you want to be added as maintainer to castnow.
+
 ### usage
 
 ```
