@@ -281,7 +281,6 @@ player.use(function(ctx, next) {
 player.use(directories);
 player.use(torrent);
 player.use(localfile);
-player.use(youtubeplaylist);
 player.use(youtube);
 player.use(transcode);
 player.use(subtitles);
