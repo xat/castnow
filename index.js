@@ -37,6 +37,7 @@ if (opts.help) {
     '--type <val>            Explicity set the mime-type (e.g. "video/mp4")',
     '--bypass-srt-encoding   Disable automatic UTF8 encoding of SRT subtitles',
     '--seek <value>          Seek to the specified time on start using the format hh:mm:ss or mm:ss',
+    '--loop                  Loop over playlist, or file, forever',
 
     '--help                  This help screen',
     '',
@@ -161,7 +162,8 @@ var ctrl = function(err, p, ctx) {
       ui.showLabels('state');
       debug('loading next in playlist: %o', playlist[0]);
       p.load(playlist[0], noop);
-      playlist.shift();
+      var file = playlist.shift();
+      if (ctx.options.loop) playlist.push(file)
     });
   };
 
@@ -186,8 +188,8 @@ var ctrl = function(err, p, ctx) {
 
     // toggle between mute / unmute
     m: function() {
-      if(!volume) { 
-        return; 
+      if(!volume) {
+        return;
       } else if (volume.muted) {
         p.unmute(function(err, status) {
           if (err) return;
@@ -288,7 +290,8 @@ player.use(subtitles);
 player.use(function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
   ctx.options = xtend(ctx.options, ctx.options.playlist[0]);
-  ctx.options.playlist.shift();
+  var file = ctx.options.playlist.shift();
+  if (ctx.options.loop) ctx.options.playlist.push(file)
   next();
 });
 
