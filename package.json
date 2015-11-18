@@ -28,9 +28,9 @@
   ],
   "dependencies": {
     "array-loop": "^1.0.0",
-    "castv2-client": "0.0.8",
+    "castv2-client": "^1.1.0",
     "chalk": "1.0.0",
-    "chromecast-player": "^0.2.2",
+    "chromecast-player": "^0.2.3",
     "debounced-seeker": "^1.0.0",
     "debug": "^2.1.0",
     "fs-extended": "^0.2.0",
