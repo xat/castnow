@@ -8,9 +8,9 @@ playback session \(this sentence should belong somewhere else).
 ### interested in being a castnow maintainer?
 
 I currently don't have that much time to maintain this project and also lost some interest (to be honest).
-Main reason is that we have had a new TV for a few months that supports casting to it directly using
-DLNA (you may wanna checkout [dlnacast](https://github.com/xat/dlnacast)).
-Feel free to contact me ( [simon@sope.io](simon@sope.io) ) if you want to be added as maintainer to castnow.
+Main reason is that we have had a new TV for a few months that supports casting directly to it using
+DLNA \(you may wanna checkout [dlnacast](https://github.com/xat/dlnacast)).
+Feel free to contact me \( [simon@sope.io](simon@sope.io) ) if you want to be added as maintainer to castnow.
 
 ### usage
 
@@ -47,11 +47,11 @@ castnow
 
 ### options
 
-* `--tomp4` Transcode a video file to mp4 while playback. This option requires
+* `--tomp4` Transcode a video file to mp4 during playback. This option requires
 ffmpeg to be installed on your computer. The play / pause controls are currently
 not supported in transcode mode.
 
-* `--device "my chromecast"` If you have more than one Chromecast in your network,
+* `--device "my chromecast"` If you have more than one Chromecast on your network,
 use the `--device` option to specify the device on which you want to start casting.
 Otherwise, castnow will just use the first device it finds in the network.
 
@@ -65,15 +65,15 @@ contains subtitles.
 
 * `--quiet` Hide the player timeline.
 
-* `--peerflix-* <options>` Pass options to peerflix.
+* `--peerflix-<option> <argument>` Pass options to peerflix.
 
-* `--ffmpeg-* <options>` Pass options to ffmpeg.
+* `--ffmpeg-<option> <argument>` Pass options to ffmpeg.
 
 * `--type <type>` Explicity set the mime-type of the first item in the playlist (e.g. 'video/mp4').
 
 * `--seek <hh:mm:ss>` Seek to the specified time on start using the format hh:mm:ss or mm:ss.
 
-* `--bypass-srt-encoding` Disable automatic UTF8 encoding of SRT subtitles.
+* `--bypass-srt-encoding` Disable automatic UTF-8 encoding of SRT subtitles.
 
 * `--help` Display help message.
 
@@ -95,7 +95,7 @@ q       // quit
 
 ### reporting bugs/issues
 
-Please always include the debug output in your issues. You can enable the debug messages by setting the
+Please include the debug output in your issues. You can enable the debug messages by setting the
 DEBUG environment variable before running the castnow command like this: `DEBUG=castnow* castnow ./myvideo.mp4`.
 Some problems have already been addressed in our wiki https://github.com/xat/castnow/wiki.
 
