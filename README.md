@@ -37,8 +37,8 @@ castnow <url-to-torrent-file OR magnet>
 // start playback of some video over torrent, with local subtitles
 castnow <url-to-torrent-file OR magnet> --subtitles </local/path/to/subtitles.srt>
 
-// transcode some other videoformat to mp4 while playback (requires ffmpeg)
-castnow ./myvideo.avi --tomp4
+// transcode some other videoformat during playback (requires ffmpeg)
+castnow ./myvideo.avi --transcode
 
 // re-attach to an currently running playback session
 castnow
@@ -47,9 +47,9 @@ castnow
 
 ### options
 
-* `--tomp4` Transcode a video file to mp4 while playback. This option requires
-ffmpeg to be installed on your computer. The play / pause controls are currently
-not supported in transcode mode.
+* `--transcode` Transcode the video file to a compatible format during
+playback. This option requires ffmpeg to be installed on your computer.
+The play / pause controls are currently not supported in transcode mode.
 
 * `--device "my chromecast"` If you have more than one chromecast in your network
 use the `--device` option to specify the device on which you want to start casting.
