@@ -55,23 +55,23 @@ not supported in transcode mode.
 use the `--device` option to specify the device on which you want to start casting.
 Otherwise, castnow will just use the first device it finds in the network.
 
-* `--address <IP>` The IP address or hostname of your chromecast. This will skip
+* `--address 192.168.1.4` The IP address or hostname of your chromecast. This will skip
 the MDNS scan.
 
 * `--subtitles <path/URL>` This can be a path or URL to a vtt or srt file that
 contains subtitles.
 
-* `--myip <IP>` Your main IP address \(useful if you have multiple network adapters)
+* `--myip 192.168.1.8` Your main IP address \(useful if you have multiple network adapters)
 
 * `--quiet` Hide the player timeline.
 
-* `--peerflix-* <val>` Pass options to peerflix.
+* `--peerflix-* <options>` Pass options to peerflix.
 
-* `--ffmpeg-* <val>` Pass options to ffmpeg.
+* `--ffmpeg-* <options>` Pass options to ffmpeg.
 
-* `--type <val>` Explicity set the mime-type of the first item in the playlist (e.g. 'video/mp4').
+* `--type <type>` Explicity set the mime-type of the first item in the playlist (e.g. 'video/mp4').
 
-* `--seek <val>` Seek to the specified time on start using the format hh:mm:ss or mm:ss.
+* `--seek <hh:mm:ss>` Seek to the specified time on start using the format hh:mm:ss or mm:ss.
 
 * `--bypass-srt-encoding` Disable automatic UTF8 encoding of SRT subtitles.
 
@@ -110,4 +110,5 @@ Some problems have already been addressed in our wiki https://github.com/xat/cas
 
 ## License
 Copyright (c) 2015 Simon Kusterer
+
 Licensed under the MIT license.
