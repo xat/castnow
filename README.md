@@ -7,10 +7,10 @@ playback session \(this sentence should belong somewhere else).
 
 ### interested in being a castnow maintainer?
 
-I currently don't have that much time to maintain this project and also lost some interest (to be honest).
+I currently don't have that much time to maintain this project and have also lost some interest (to be honest).
 Main reason is that we have had a new TV for a few months that supports casting directly to it using
 DLNA \(you may wanna checkout [dlnacast](https://github.com/xat/dlnacast)).
-Feel free to contact me \( [simon@sope.io](simon@sope.io) ) if you want to be added as maintainer to castnow.
+Feel free to contact me \( [simon@sope.io](simon@sope.io) ) if you want to be added as a maintainer to castnow.
 
 ### usage
 
@@ -82,7 +82,7 @@ contains subtitles.
 ```
 
 space   // toggle between play and pause
-m       // toggle between mute and unmute
+m       // toggle mute
 up      // volume up
 down    // volume down
 left    // seek backward (keep pressed / multiple press for faster seek)
