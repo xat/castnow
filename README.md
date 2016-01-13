@@ -74,6 +74,8 @@ contains subtitles.
 
 * `--bypass-srt-encoding` Disable automatic UTF8 encoding of SRT subtitles.
 
+* `--loop` Play the list of files over and over in a loop, forever.
+
 * `--help` Display help message.
 
 ### player controls
