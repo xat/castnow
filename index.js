@@ -19,6 +19,7 @@ var torrent = require('./plugins/torrent');
 var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
+var stdin = require('./plugins/stdin');
 
 if (opts.help) {
   return console.log([
@@ -280,6 +281,7 @@ player.use(function(ctx, next) {
   next();
 });
 
+player.use(stdin);
 player.use(directories);
 player.use(torrent);
 player.use(localfile);
