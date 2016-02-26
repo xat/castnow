@@ -61,6 +61,10 @@ the MDNS scan.
 * `--subtitles <path/URL>` This can be a path or URL to a vtt or srt file that
 contains subtitles.
 
+* `--subtitle-scale 1.5` Scaling factor for the size of the subtitle font. Default is 1.0.
+
+* `--subtitle-color #FFFFFFFF` Foreground RGBA color of the subtitle font.
+
 * `--myip 192.168.1.8` Your main IP address \(useful if you have multiple network adapters)
 
 * `--quiet` Hide the player timeline.
@@ -105,7 +109,7 @@ Some problems have already been addressed in our wiki https://github.com/xat/cas
 
 `npm install castnow -g`
 
-### contributers
+### contributors
 
 * [tooryx](https://github.com/tooryx)
 * [przemyslawpluta](https://github.com/przemyslawpluta)
