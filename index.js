@@ -30,6 +30,8 @@ if (opts.help) {
     '--device <name>         The name of the Chromecast device that should be used',
     '--address <ip>          The IP address or hostname of your Chromecast device',
     '--subtitles <path/url>  Path or URL to an SRT or VTT file',
+    '--subtitle-scale <scale> Subtitle font scale',
+    '--subtitle-color <color> Subtitle font RGBA color',
     '--myip <ip>             Your local IP address',
     '--quiet                 No output',
     '--peerflix-* <value>    Pass options to peerflix',
