@@ -16,7 +16,6 @@ var noop = function() {};
 var directories = require('./plugins/directories');
 var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
-var youtube = require('./plugins/youtube');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 var stdin = require('./plugins/stdin');
@@ -285,7 +284,6 @@ player.use(stdin);
 player.use(directories);
 player.use(torrent);
 player.use(localfile);
-player.use(youtube);
 player.use(transcode);
 player.use(subtitles);
 
@@ -293,7 +291,7 @@ player.use(function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
   ctx.options = xtend(ctx.options, ctx.options.playlist[0]);
   var file = ctx.options.playlist.shift();
-  if (ctx.options.loop) ctx.options.playlist.push(file)
+  if (ctx.options.loop) ctx.options.playlist.push(file);
   next();
 });
 

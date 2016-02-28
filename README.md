@@ -1,9 +1,8 @@
 # castnow
 
 castnow is a command-line utility that can be used to play back media files on
-your Chromecast device. It supports playback of local video files, YouTube
-clips, videos on the web and torrents. You can also re-attach a running
-playback session \(this sentence should belong somewhere else).
+your Chromecast device. It supports playback of local video files, videos on the web and torrents.
+You can also re-attach a running playback session \(this sentence should belong somewhere else).
 
 ### interested in being a castnow maintainer?
 
@@ -27,9 +26,6 @@ castnow video1.mp4 video2.mp4 video3.mp4
 
 // start playback of an mp4 file over the web
 castnow http://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4
-
-// start playback of a youtube clip
-castnow https://www.youtube.com/watch?v=pcVRrlmpcWk
 
 // start playback of a video over torrent
 castnow <url-to-torrent-file OR magnet>
@@ -94,6 +90,15 @@ s       // stop playback
 q       // quit
 
 ```
+
+### YouTube support
+
+We had to drop direct YouTube support for now since google changed the chromecast YouTube API.
+However, there is a nice workaround in combination with the tool [youtube-dl](https://github.com/rg3/youtube-dl):
+
+`youtube-dl -o - https://youtu.be/BaW_jenozKc | castnow --quiet -`
+
+Thanks to [trulex](https://github.com/trulex) for pointing that out.
 
 ### reporting bugs/issues
 
