@@ -33,6 +33,7 @@ var transcode = function(ctx, next) {
       .videoCodec('h264')
       .format('mp4')
       .custom('strict', 'experimental')
+      .custom('ss', '00:05:00')
       .on('finish', function() {
         debug('finished transcoding');
       })
