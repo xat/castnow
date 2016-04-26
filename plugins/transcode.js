@@ -4,6 +4,7 @@ var got = require('got');
 var Transcoder = require('stream-transcoder');
 var grabOpts = require('../utils/grab-opts');
 var debug = require('debug')('castnow:transcode');
+var fs = require('fs');
 var port = 4103;
 
 var transcode = function(ctx, next) {
@@ -29,11 +30,13 @@ var transcode = function(ctx, next) {
       debug('got error: %o', err);
     });
 
+    var seek_input = fs.readFileSync('seek_input', 'utf8');
+    
     var trans = new Transcoder(s)
       .videoCodec('h264')
       .format('mp4')
       .custom('strict', 'experimental')
-      .custom('ss', '00:05:00')
+      .custom('ss', seek_input)
       .on('finish', function() {
         debug('finished transcoding');
       })
