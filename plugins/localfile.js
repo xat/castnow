@@ -5,7 +5,6 @@ var path = require('path');
 var serveMp4 = require('../utils/serve-mp4');
 var debug = require('debug')('castnow:localfile');
 var fs = require('fs');
-var port = 4100;
 
 var isFile = function(item) {
   return fs.existsSync(item.path) && fs.statSync(item.path).isFile();
@@ -25,7 +24,8 @@ var localfile = function(ctx, next) {
   var route = router();
   var list = ctx.options.playlist.slice(0);
   var ip = (ctx.options.myip || internalIp());
-
+  var port = ctx.options.localfile-port || 4100;
+ 
   ctx.options.playlist = list.map(function(item, idx) {
     if (!isFile(item)) return item;
     return {

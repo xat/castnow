@@ -32,6 +32,7 @@ if (opts.help) {
     '--subtitles <path/url>  Path or URL to an SRT or VTT file',
     '--subtitle-scale <scale> Subtitle font scale',
     '--subtitle-color <color> Subtitle font RGBA color',
+    '--subtitle-port <port>  Specify the port to be used for serving subtitles',
     '--myip <ip>             Your local IP address',
     '--quiet                 No output',
     '--peerflix-* <value>    Pass options to peerflix',
@@ -40,6 +41,7 @@ if (opts.help) {
     '--bypass-srt-encoding   Disable automatic UTF-8 encoding of SRT subtitles',
     '--seek <hh:mm:ss>       Seek to the specified time on start using the format hh:mm:ss or mm:ss',
     '--loop                  Loop over playlist, or file, forever',
+    '--localfile-port <port> Specify the port to be used for serving a local file',
 
     '--help                  This help screen',
     '',
