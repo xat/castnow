@@ -64,7 +64,7 @@ var subtitles = function(ctx, next) {
   if (!ctx.options.subtitles) return next();
   if (ctx.options.playlist.length > 1) return next();
 
-  var port = ctx.options.subtitle-port || 4101;
+  var port = ctx.options['subtitle-port'] || 4101;
   srtToVtt(ctx.options, function(err, data) {
     if (err) return next();
     debug('loading subtitles', ctx.options.subtitles);

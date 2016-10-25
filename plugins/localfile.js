@@ -24,7 +24,7 @@ var localfile = function(ctx, next) {
   var route = router();
   var list = ctx.options.playlist.slice(0);
   var ip = (ctx.options.myip || internalIp());
-  var port = ctx.options.localfile-port || 4100;
+  var port = ctx.options.['localfile-port'] || 4100;
  
   ctx.options.playlist = list.map(function(item, idx) {
     if (!isFile(item)) return item;

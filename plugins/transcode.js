@@ -4,13 +4,12 @@ var got = require('got');
 var Transcoder = require('stream-transcoder');
 var grabOpts = require('../utils/grab-opts');
 var debug = require('debug')('castnow:transcode');
-var port = 4103;
 
 var transcode = function(ctx, next) {
   if (ctx.mode !== 'launch' || !ctx.options.tomp4) return next();
   if (ctx.options.playlist.length > 1) return next();
   var orgPath = ctx.options.playlist[0].path;
-
+  var port = ctx.options.['transcode-port'] || 4103;
   var ip = ctx.options.myip || internalIp();
   ctx.options.playlist[0] = {
     path: 'http://' + ip + ':' + port,

@@ -42,6 +42,9 @@ if (opts.help) {
     '--seek <hh:mm:ss>       Seek to the specified time on start using the format hh:mm:ss or mm:ss',
     '--loop                  Loop over playlist, or file, forever',
     '--localfile-port <port> Specify the port to be used for serving a local file',
+    '--transcode-port <port> Specify the port to be used for serving a transcoded file',
+    '--torrent-port <port>   Specify the port to be used for serving a torrented file',
+    '--stdin-port <port> Specify the port to be used for serving a file read from stdin',
 
     '--help                  This help screen',
     '',
