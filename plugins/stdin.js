@@ -2,8 +2,6 @@ var http = require('http');
 var internalIp = require('internal-ip');
 var debug = require('debug')('castnow:stdin');
 
-var port = 4104;
-
 var isStdin = function(item) {
     return '-'===item.path;
 };
@@ -14,6 +12,7 @@ var stdin = function(ctx, next) {
     if (ctx.mode !== 'launch') return next();
     if (ctx.options.playlist.length != 1 || !isStdin(ctx.options.playlist[0])) return next();
 
+    var port = ctx.options['stdin-port'] || 4104;
     var ip = ctx.options.myip || internalIp();
     ctx.options.playlist[0] = {
         path: 'http://' + ip + ':' + port,

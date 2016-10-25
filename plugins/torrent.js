@@ -3,12 +3,13 @@ var peerflix = require('peerflix');
 var internalIp = require('internal-ip');
 var grabOpts = require('../utils/grab-opts');
 var debug = require('debug')('castnow:torrent');
-var port = 4102;
 
 var torrent = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
   if (ctx.options.playlist.length > 1) return next();
   var path = ctx.options.playlist[0].path;
+
+  var port = ctx.options['torrent-port'] || 4102;
 
   if (!/^magnet:/.test(path) &&
       !/torrent$/.test(path) &&
