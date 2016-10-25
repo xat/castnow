@@ -9,7 +9,7 @@ var torrent = function(ctx, next) {
   if (ctx.options.playlist.length > 1) return next();
   var path = ctx.options.playlist[0].path;
 
-  var port = ctx.options.['torrent-port'] || 4102;
+  var port = ctx.options['torrent-port'] || 4102;
 
   if (!/^magnet:/.test(path) &&
       !/torrent$/.test(path) &&
