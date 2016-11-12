@@ -29,6 +29,7 @@ if (opts.help) {
     '--tomp4                 Convert file to mp4 during playback',
     '--device <name>         The name of the Chromecast device that should be used',
     '--address <ip>          The IP address or hostname of your Chromecast device',
+    '--volume-step <step>    Step at which the volume changes. Helpful for speakers that are softer or louder than normal. Value ranges from 0 to 1 (e.g. ".05")',
     '--subtitles <path/url>  Path or URL to an SRT or VTT file',
     '--subtitle-scale <scale> Subtitle font scale',
     '--subtitle-color <color> Subtitle font RGBA color',
@@ -78,7 +79,33 @@ if (opts.quiet || process.env.DEBUG) {
   ui.hide();
 }
 
+var volumeStep = 0.05;
+var stepOption = opts['volume-step'];
+
+if (stepOption) {
+  var parsed = parseFloat(stepOption);
+
+  if (isNaN(parsed)) {
+    fatalError('invalid --volume-step');
+  }
+
+  if (parsed < 0 || parsed > 1) {
+    fatalError('--volume-step must be between 0 and 1');
+  }
+
+  volumeStep = parsed;
+}
+
+debug('volume step: %s', volumeStep);
+
 ui.showLabels('state');
+
+function fatalError(err) {
+  ui.hide(err);
+  debug(err);
+  console.log(chalk.red(err));
+  process.exit();
+}
 
 var last = function(fn, l) {
   return function() {
@@ -212,18 +239,38 @@ var ctrl = function(err, p, ctx) {
 
     // volume up
     up: function() {
-      if (!volume || volume.level >= 1) return;
-      p.setVolume(Math.min(volume.level + 0.05, 1), function(err, status) {
-        if (err) return;
+      if (!volume || volume.level >= 1) {
+        return;
+      }
+
+      var newVolume = Math.min(volume.level + volumeStep, 1);
+
+      p.setVolume(newVolume, function(err, status) {
+        if (err) {
+          return;
+        }
+
+        debug("volume up: %s", status.level);
+
         volume = status;
       });
     },
 
     // volume down
     down: function() {
-      if (!volume || volume.level <= 0) return;
-      p.setVolume(Math.max(volume.level - 0.05, 0), function(err, status) {
-        if (err) return;
+      if (!volume || volume.level <= 0) {
+        return;
+      }
+
+      var newVolume = Math.max(volume.level - volumeStep, 0);
+
+      p.setVolume(newVolume, function(err, status) {
+        if (err) {
+          return;
+        }
+
+        debug("volume down: %s", status.level);
+
         volume = status;
       });
     },
