@@ -36,6 +36,11 @@ castnow <url-to-torrent-file OR magnet> --subtitles </local/path/to/subtitles.sr
 // transcode some other video format to mp4 while playback (requires ffmpeg)
 castnow ./myvideo.avi --tomp4
 
+// change the increment at which the volume steps up or down. A lower number
+// is helpful if your speakers are very loud, and you want more precision over
+// the change in volume
+castnow ./song.mp3 --volume-step "0.01"
+
 // re-attach to a currently running playback session
 castnow
 
@@ -76,6 +81,8 @@ contains subtitles.
 * `--bypass-srt-encoding` Disable automatic UTF-8 encoding of SRT subtitles.
 
 * `--loop` Play the list of files over and over in a loop, forever.
+
+* `--volume-step` Step at which the volume changes. Helpful for speakers that are softer or louder than normal. Value ranges from 0 to 1. Default is 0.5.
 
 * `--help` Display help message.
 
