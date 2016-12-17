@@ -25,7 +25,7 @@ var localfile = function(ctx, next) {
   var list = ctx.options.playlist.slice(0);
   var ip = (ctx.options.myip || internalIp());
   var port = ctx.options['localfile-port'] || 4100;
- 
+
   ctx.options.playlist = list.map(function(item, idx) {
     if (!isFile(item)) return item;
     return {
@@ -33,6 +33,7 @@ var localfile = function(ctx, next) {
       type: 'video/mp4',
       media: {
         metadata: {
+          filePath: item.path,
           title: path.basename(item.path)
         }
       }
