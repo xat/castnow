@@ -54,6 +54,7 @@ if (opts.help) {
     'Key                      Action',
     'space                    Toggle between play and pause',
     'm                        Toggle mute',
+    't                        Toggle subtitles',
     'up                       Volume Up',
     'down                     Volume Down',
     'left                     Seek backward',
@@ -235,6 +236,15 @@ var ctrl = function(err, p, ctx) {
           volume = status;
         });
       }
+    },
+
+    t: function() {
+      if (!p.currentSession.media.tracks) { return }
+      var sessionRequestBody = {
+        type: 'EDIT_TRACKS_INFO'
+      }
+      sessionRequestBody.activeTrackIds = p.currentSession.activeTrackIds ? [] : [1];
+      p.sessionRequest(sessionRequestBody);
     },
 
     // volume up

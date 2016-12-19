@@ -92,6 +92,7 @@ contains subtitles.
 
 space   // toggle between play and pause
 m       // toggle mute
+t       // toggle subtitles
 up      // volume up
 down    // volume down
 left    // seek backward (keep pressed / multiple press for faster seek)
