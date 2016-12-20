@@ -36,6 +36,9 @@ castnow <url-to-torrent-file OR magnet> --subtitles </local/path/to/subtitles.sr
 // transcode some other video format to mp4 while playback (requires ffmpeg)
 castnow ./myvideo.avi --tomp4
 
+// transcode only audio while playback (in case the video shows, but there's no audio)
+castnow ./myvideo.mkv --tomp4 --ffmpeg-vcodec copy
+
 // change the increment at which the volume steps up or down. A lower number
 // is helpful if your speakers are very loud, and you want more precision over
 // the change in volume
