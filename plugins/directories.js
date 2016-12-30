@@ -1,6 +1,5 @@
 var fs = require('fs-extended');
 var path = require('path');
-var shuffle = require('array-shuffle');
 var join = path.join;
 var extname = path.extname;
 var debug = require('debug')('castnow:directories');
@@ -43,8 +42,6 @@ var flattenFiles = function(playlist) {
 var directories = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
   ctx.options.playlist = flattenFiles(ctx.options.playlist);
-  if (ctx.options.shuffle)
-    ctx.options.playlist = shuffle(ctx.options.playlist);
   next();
 };
 
