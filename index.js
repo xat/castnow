@@ -41,6 +41,7 @@ if (opts.help) {
     '--bypass-srt-encoding    Disable automatic UTF-8 encoding of SRT subtitles',
     '--seek <hh:mm:ss>        Seek to the specified time on start using the format hh:mm:ss or mm:ss',
     '--loop                   Loop over playlist, or file, forever',
+    '--shuffle                Play in random order',
     '--volume-step <step>     Step at which the volume changes. Helpful for speakers that are softer or louder than normal. Value ranges from 0 to 1 (e.g. ".05")',
     '--localfile-port <port>  Specify the port to be used for serving a local file',
     '--transcode-port <port>  Specify the port to be used for serving a transcoded file',

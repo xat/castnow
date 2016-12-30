@@ -28,6 +28,7 @@
   ],
   "dependencies": {
     "array-loop": "^1.0.0",
+    "array-shuffle": "^1.0.1",
     "castv2-client": "^1.1.0",
     "chalk": "1.0.0",
     "chromecast-player": "^0.2.3",
