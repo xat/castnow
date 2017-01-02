@@ -79,6 +79,7 @@ var attachSubtitles = function(ctx) {
 **  - If they are stored locally we need to convert and serve them via http.
 */
 var subtitles = function(ctx, next) {
+  if (ctx.mode !== 'launch') return next();
   if (ctx.options.playlist.length > 1) return next();
 
   if (!ctx.options.subtitles) {
