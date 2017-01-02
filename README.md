@@ -87,6 +87,8 @@ contains subtitles.
 
 * `--shuffle` Play the list of files in random order.
 
+* `--recursive` List all files in directories recursively.
+
 * `--volume-step` Step at which the volume changes. Helpful for speakers that are softer or louder than normal. Value ranges from 0 to 1. Default is 0.05.
 
 * `--help` Display help message.
