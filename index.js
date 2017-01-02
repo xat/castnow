@@ -7,6 +7,7 @@ var keypress = require('keypress');
 var ui = require('playerui')();
 var circulate = require('array-loop');
 var xtend = require('xtend');
+var shuffle = require('array-shuffle');
 var unformatTime = require('./utils/unformat-time');
 var debug = require('debug')('castnow');
 var debouncedSeeker = require('debounced-seeker');
@@ -41,6 +42,7 @@ if (opts.help) {
     '--bypass-srt-encoding    Disable automatic UTF-8 encoding of SRT subtitles',
     '--seek <hh:mm:ss>        Seek to the specified time on start using the format hh:mm:ss or mm:ss',
     '--loop                   Loop over playlist, or file, forever',
+    '--shuffle                Play in random order',
     '--volume-step <step>     Step at which the volume changes. Helpful for speakers that are softer or louder than normal. Value ranges from 0 to 1 (e.g. ".05")',
     '--localfile-port <port>  Specify the port to be used for serving a local file',
     '--transcode-port <port>  Specify the port to be used for serving a transcoded file',
@@ -353,6 +355,8 @@ player.use(subtitles);
 
 player.use(function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
+  if (ctx.options.shuffle)
+    ctx.options.playlist = shuffle(ctx.options.playlist);
   ctx.options = xtend(ctx.options, ctx.options.playlist[0]);
   var file = ctx.options.playlist.shift();
   if (ctx.options.loop) ctx.options.playlist.push(file);
