@@ -1,4 +1,4 @@
-var fs = require('fs-extended');
+var fs = require('fs');
 var diveSync = require('diveSync');
 var path = require('path');
 var join = path.join;
