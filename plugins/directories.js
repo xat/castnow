@@ -1,4 +1,5 @@
-var fs = require('fs-extended');
+var fs = require('fs');
+var diveSync = require('diveSync');
 var path = require('path');
 var join = path.join;
 var extname = path.extname;
@@ -9,8 +10,9 @@ var acceptedExtensions = {
   '.mp4': true
 };
 
-function filter(filePath) {
-  return !!acceptedExtensions[extname(filePath)];
+function filter(filePath, dir) {
+  if (dir) return true;
+  return acceptedExtensions[extname(filePath)];
 }
 
 var isDir = function(item) {
@@ -20,18 +22,17 @@ var isDir = function(item) {
 // check which items in the playlist are
 // actually directories and get all mp4 and
 // mp3 files out of those.
-var flattenFiles = function(playlist) {
+var flattenFiles = function(playlist, recursive) {
   var items = [];
   playlist.forEach(function(item) {
     if (isDir(item)) {
       debug('directory found: %s', item.path);
-      var mediaFiles = fs.listFilesSync(item.path, { filter: filter });
-      items.push.apply(items, mediaFiles.map(function(file) {
-        debug('added file %s from directory %s', file, item.path);
-        return {
-          path: join(item.path, file)
-        };
-      }));
+      var opts = { recursive: recursive, filter: filter };
+      diveSync(item.path, opts, function(err, file) {
+        if (err) throw err;
+        debug('added file %s', file);
+        items.push({ path: file });
+      });
       return;
     }
     items.push(item);
@@ -41,7 +42,7 @@ var flattenFiles = function(playlist) {
 
 var directories = function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
-  ctx.options.playlist = flattenFiles(ctx.options.playlist);
+  ctx.options.playlist = flattenFiles(ctx.options.playlist, ctx.options.recursive);
   next();
 };
 
