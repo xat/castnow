@@ -49,7 +49,7 @@ if (opts.help) {
     '--transcode-port <port>  Specify the port to be used for serving a transcoded file',
     '--torrent-port <port>    Specify the port to be used for serving a torrented file',
     '--stdin-port <port>      Specify the port to be used for serving a file read from stdin',
-    '--exit                  Exit the user interface when playback begins',
+    '--exit                   Exit the user interface when playback begins',
 
     '--help                   This help screen',
     '',
