@@ -91,6 +91,8 @@ contains subtitles.
 
 * `--volume-step` Step at which the volume changes. Helpful for speakers that are softer or louder than normal. Value ranges from 0 to 1. Default is 0.05.
 
+* `--exit` Exit the user interface when playback begins.
+
 * `--help` Display help message.
 
 ### player controls

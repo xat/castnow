@@ -49,6 +49,7 @@ if (opts.help) {
     '--transcode-port <port>  Specify the port to be used for serving a transcoded file',
     '--torrent-port <port>    Specify the port to be used for serving a torrented file',
     '--stdin-port <port>      Specify the port to be used for serving a file read from stdin',
+    '--exit                   Exit the user interface when playback begins',
 
     '--help                   This help screen',
     '',
@@ -79,7 +80,7 @@ if (opts._.length) {
 
 delete opts._;
 
-if (opts.quiet || process.env.DEBUG) {
+if (opts.quiet || opts.exit || process.env.DEBUG) {
   ui.hide();
 }
 
@@ -206,6 +207,7 @@ var ctrl = function(err, p, ctx) {
   };
 
   p.on('status', last(function(status, memo) {
+    if (opts.exit && status.playerState == 'PLAYING') process.exit();
     if (status.playerState !== 'IDLE') return;
     if (status.idleReason !== 'FINISHED') return;
     if (memo && memo.playerState === 'IDLE') return;
