@@ -131,10 +131,13 @@ var ctrl = function(err, p, ctx) {
 
   var playlist = ctx.options.playlist;
   var volume;
+  var is_keyboard_interactive = process.stdin.isTTY || false;
 
-  keypress(process.stdin);
-  process.stdin.setRawMode(true);
-  process.stdin.resume();
+  if (is_keyboard_interactive) {
+    keypress(process.stdin);
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+  }
 
   ctx.once('closed', function() {
     ui.hide();
@@ -316,15 +319,52 @@ var ctrl = function(err, p, ctx) {
     }
   };
 
-  process.stdin.on('keypress', function(ch, key) {
-    if (key && key.name && keyMappings[key.name]) {
-      debug('key pressed: %s', key.name);
-      keyMappings[key.name]();
-    }
-    if (key && key.ctrl && key.name == 'c') {
-      process.exit();
-    }
-  });
+  if (is_keyboard_interactive) {
+    // Accept interactive keys from the terminal.
+    process.stdin.on('keypress', function(ch, key) {
+      if (key && key.name && keyMappings[key.name]) {
+        debug('key pressed: %s', key.name);
+        keyMappings[key.name]();
+      }
+      if (key && key.ctrl && key.name == 'c') {
+        process.exit();
+      }
+    });
+  } else {
+    // Read "key names" from standard input and behave as if each key had been
+    // pressed in turn.  Exit on EOF.  For example, to pause/play:
+    //   echo "space" | castnow --quiet --address SOMETHING
+    p.getStatus(function (err) {
+      if (!err) {
+        var pending_commands = [];
+        var command_runner = null;
+        keyMappings.exit = function () { process.exit(); };
+
+        function run_commands() {
+          if (0 < pending_commands.length) {
+            keyMappings[pending_commands.pop()]();
+            p.getStatus(run_commands);
+            return command_runner = this;
+          }
+          else {
+            return command_runner = null;
+          }
+        }
+
+        process.stdin.on('data', function (chunk) {
+          var tokens = chunk.toString().trim().split(/\s+/).filter(function (token) {
+            return token && keyMappings[token];
+          });
+          pending_commands = tokens.reverse().concat(pending_commands);
+          command_runner = command_runner || run_commands();
+        });
+        process.stdin.on('end', function () {
+          pending_commands = ['exit'].concat(pending_commands);
+          command_runner = command_runner || run_commands();
+        });
+      }
+    });
+  }
 };
 
 var capitalize = function(str) {
