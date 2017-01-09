@@ -330,7 +330,7 @@ var ctrl = function(err, p, ctx) {
         process.exit();
       }
     });
-  } else {
+  } else if (!playlist) {
     // Read "key names" from standard input and behave as if each key had been
     // pressed in turn.  Exit on EOF.  For example, to pause/play:
     //   echo "space" | castnow --quiet --address SOMETHING
