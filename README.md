@@ -123,17 +123,18 @@ Thanks to [trulex](https://github.com/trulex) for pointing that out.
 
 ### non-interactive use
 
-If standard input is not a TTY and no playlist arguments are provided, the
-castnow accepts keyboard commands via standard input.  The command names are the key names listed above under *player controls*.
+If standard input is not a TTY and no playlist arguments are provided, then
+castnow accepts keyboard commands via standard input.  The command names are
+the key names listed above under *player controls*.
 
 Examples:
 
 ```
 # Play or pause:
-echo "space" | castnow --quiet --address SOMETHING
+echo "space" | castnow --quiet --address SOME_ADDRESS
 
 # Louder:
-echo "up" | castnow --quiet --address SOMETHING
+echo "up" | castnow --quiet --device SOME_DEVICE
 ```
 
 ### reporting bugs/issues
