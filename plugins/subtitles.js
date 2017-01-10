@@ -22,9 +22,8 @@ var srtToVtt = function(options, cb) {
 };
 
 var findSubtitles = function(options) {
+  if (!options.playlist[0].media || !options.playlist[0].media.metadata || !options.playlist[0].media.metadata.filePath) return;
   var videoPath = options.playlist[0].media.metadata.filePath;
-  if (!videoPath) return;
-
   var videoBaseName = path.basename(videoPath, path.extname(videoPath));
   var mediaFolder = path.dirname(videoPath);
   var srtPath = path.join(mediaFolder, videoBaseName + '.srt');
