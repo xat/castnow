@@ -91,7 +91,9 @@ contains subtitles.
 
 * `--volume-step` Step at which the volume changes. Helpful for speakers that are softer or louder than normal. Value ranges from 0 to 1. Default is 0.05.
 
-* `--exit` Exit the user interface when playback begins.
+* `--command <key1>,<key2>,...` Execute key command(s) (where each `<key>` is one of the keys listed under *player controls*, below).
+
+* `--exit` Exit when playback begins or `--command <key>` completes.
 
 * `--help` Display help message.
 
@@ -120,6 +122,18 @@ However, there is a nice workaround in combination with the tool [youtube-dl](ht
 `youtube-dl -o - https://youtu.be/BaW_jenozKc | castnow --quiet -`
 
 Thanks to [trulex](https://github.com/trulex) for pointing that out.
+
+### non-interactive use
+
+castnow can also be used in cron jobs or via window-manager bindings; for example:
+
+```
+# Play/pause.
+castnow --command space --exit
+
+# Louder.
+castnow --command up --exit
+```
 
 ### reporting bugs/issues
 

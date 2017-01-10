@@ -49,7 +49,8 @@ if (opts.help) {
     '--transcode-port <port>  Specify the port to be used for serving a transcoded file',
     '--torrent-port <port>    Specify the port to be used for serving a torrented file',
     '--stdin-port <port>      Specify the port to be used for serving a file read from stdin',
-    '--exit                   Exit the user interface when playback begins',
+    '--command <key1>,<key2>  Execute key command(s) (where each <key> is one of the keys listed below)',
+    '--exit                   Exit when playback begins or --command completes',
 
     '--help                   This help screen',
     '',
@@ -131,10 +132,13 @@ var ctrl = function(err, p, ctx) {
 
   var playlist = ctx.options.playlist;
   var volume;
+  var is_keyboard_interactive = process.stdin.isTTY || false;
 
-  keypress(process.stdin);
-  process.stdin.setRawMode(true);
-  process.stdin.resume();
+  if (is_keyboard_interactive) {
+    keypress(process.stdin);
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+  }
 
   ctx.once('closed', function() {
     ui.hide();
@@ -316,15 +320,41 @@ var ctrl = function(err, p, ctx) {
     }
   };
 
-  process.stdin.on('keypress', function(ch, key) {
-    if (key && key.name && keyMappings[key.name]) {
-      debug('key pressed: %s', key.name);
-      keyMappings[key.name]();
+  if (is_keyboard_interactive) {
+    process.stdin.on('keypress', function(ch, key) {
+      if (key && key.name && keyMappings[key.name]) {
+        debug('key pressed: %s', key.name);
+        keyMappings[key.name]();
+      }
+      if (key && key.ctrl && key.name == 'c') {
+        process.exit();
+      }
+    });
+  }
+
+  if (opts.command) {
+    var commands = opts.command.split(",");
+    commands.forEach(function(command) {
+      if (!keyMappings[command]) {
+        fatalError('invalid --command: ' + command);
+      }
+    });
+
+    var index = 0;
+    function run_commands() {
+      if (index < commands.length) {
+        var command = commands[index++];
+        keyMappings[command]();
+        p.getStatus(run_commands);
+      } else {
+        if (opts.exit) {
+          process.exit();
+        }
+      }
     }
-    if (key && key.ctrl && key.name == 'c') {
-      process.exit();
-    }
-  });
+
+    p.getStatus(run_commands);
+  }
 };
 
 var capitalize = function(str) {
