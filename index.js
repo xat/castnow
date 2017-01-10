@@ -49,7 +49,8 @@ if (opts.help) {
     '--transcode-port <port>  Specify the port to be used for serving a transcoded file',
     '--torrent-port <port>    Specify the port to be used for serving a torrented file',
     '--stdin-port <port>      Specify the port to be used for serving a file read from stdin',
-    '--exit                   Exit the user interface when playback begins',
+    '--command <key>          Execute a single key command (where <key> is one of the keys listed below)',
+    '--exit                   Exit when playback begins or --command completes',
 
     '--help                   This help screen',
     '',
@@ -131,10 +132,13 @@ var ctrl = function(err, p, ctx) {
 
   var playlist = ctx.options.playlist;
   var volume;
+  var is_keyboard_interactive = process.stdin.isTTY || false;
 
-  keypress(process.stdin);
-  process.stdin.setRawMode(true);
-  process.stdin.resume();
+  if (is_keyboard_interactive) {
+    keypress(process.stdin);
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+  }
 
   ctx.once('closed', function() {
     ui.hide();
@@ -316,15 +320,32 @@ var ctrl = function(err, p, ctx) {
     }
   };
 
-  process.stdin.on('keypress', function(ch, key) {
-    if (key && key.name && keyMappings[key.name]) {
-      debug('key pressed: %s', key.name);
-      keyMappings[key.name]();
+  if (is_keyboard_interactive) {
+    process.stdin.on('keypress', function(ch, key) {
+      if (key && key.name && keyMappings[key.name]) {
+        debug('key pressed: %s', key.name);
+        keyMappings[key.name]();
+      }
+      if (key && key.ctrl && key.name == 'c') {
+        process.exit();
+      }
+    });
+  }
+
+  if (opts.command) {
+    if (!keyMappings[opts.command]) {
+      fatalError('invalid --command');
     }
-    if (key && key.ctrl && key.name == 'c') {
-      process.exit();
-    }
-  });
+
+    p.getStatus(function (err) {
+      if (!err) {
+        keyMappings[opts.command]();
+        if (opts.exit) {
+          p.getStatus(function (err) { process.exit(); });
+        }
+      }
+    });
+  }
 };
 
 var capitalize = function(str) {
