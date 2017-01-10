@@ -49,7 +49,7 @@ if (opts.help) {
     '--transcode-port <port>  Specify the port to be used for serving a transcoded file',
     '--torrent-port <port>    Specify the port to be used for serving a torrented file',
     '--stdin-port <port>      Specify the port to be used for serving a file read from stdin',
-    '--command <key>          Execute a single key command (where <key> is one of the keys listed below)',
+    '--command <key1>,<key2>  Execute key command(s) (where each <key> is one of the keys listed below)',
     '--exit                   Exit when playback begins or --command completes',
 
     '--help                   This help screen',
@@ -333,18 +333,27 @@ var ctrl = function(err, p, ctx) {
   }
 
   if (opts.command) {
-    if (!keyMappings[opts.command]) {
-      fatalError('invalid --command');
-    }
-
-    p.getStatus(function (err) {
-      if (!err) {
-        keyMappings[opts.command]();
-        if (opts.exit) {
-          p.getStatus(function (err) { process.exit(); });
-        }
+    var commands = opts.command.split(",");
+    commands.forEach(function(command) {
+      if (!keyMappings[command]) {
+        fatalError('invalid --command: ' + command);
       }
     });
+
+    var index = 0;
+    function run_commands() {
+      if (index < commands.length) {
+        var command = commands[index++];
+        keyMappings[command]();
+        p.getStatus(run_commands);
+      } else {
+        if (opts.exit) {
+          process.exit();
+        }
+      }
+    }
+
+    p.getStatus(run_commands);
   }
 };
 

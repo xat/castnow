@@ -91,7 +91,7 @@ contains subtitles.
 
 * `--volume-step` Step at which the volume changes. Helpful for speakers that are softer or louder than normal. Value ranges from 0 to 1. Default is 0.05.
 
-* `--command <key>` Execute a single key command (where `<key>` is one of the keys listed under *player controls*, below).
+* `--command <key1>,<key2>,...` Execute key command(s) (where each `<key>` is one of the keys listed under *player controls*, below).
 
 * `--exit` Exit when playback begins or `--command <key>` completes.
 
