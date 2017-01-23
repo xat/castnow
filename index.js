@@ -15,6 +15,7 @@ var noop = function() {};
 
 // plugins
 var directories = require('./plugins/directories');
+var xspf = require('./plugins/xspf');
 var localfile = require('./plugins/localfile');
 var torrent = require('./plugins/torrent');
 var transcode = require('./plugins/transcode');
@@ -382,6 +383,7 @@ player.use(function(ctx, next) {
 player.use(stdin);
 player.use(directories);
 player.use(torrent);
+player.use(xspf);
 player.use(localfile);
 player.use(transcode);
 player.use(subtitles);
