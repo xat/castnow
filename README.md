@@ -128,11 +128,54 @@ Thanks to [trulex](https://github.com/trulex) for pointing that out.
 castnow can also be used in cron jobs or via window-manager bindings; for example:
 
 ```
-# Play/pause.
+// Play/pause.
 castnow --command space --exit
 
-# Louder.
+// Louder.
 castnow --command up --exit
+```
+
+#### usage via [screen](https://www.gnu.org/software/screen/) command
+
+To avoid starting a new castnow command every time (which takes long time) you should use background sessions.
+
+```
+// run castnow in backgound only once:
+screen -d -m -S cast_session castnow /path/to/mp3/
+
+// use the running session:
+// Play/pause.
+screen -S cast_session -X stuff ' '
+
+// Mute.
+screen -S cast_session -X stuff 'm'
+
+// Subtitles.
+screen -S cast_session -X stuff 't'
+
+// Volume up.
+screen -S cast_session -X stuff $'\e[A'
+
+// Volume down.
+screen -S cast_session -X stuff $'\e[B'
+
+// Seek backward.
+screen -S cast_session -X stuff $'\e[D'
+
+// Seek forward.
+screen -S cast_session -X stuff $'\e[C'
+
+// Next item in the playlist.
+screen -S cast_session -X stuff 'n'
+
+// stop playback.
+screen -S cast_session -X stuff 's'
+
+
+// quit/stop session
+screen -S cast_session -X stuff 'q'
+// or
+screen -S cast_session -X quit
 ```
 
 ### reporting bugs/issues
