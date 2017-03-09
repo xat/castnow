@@ -159,12 +159,22 @@ var ctrl = function(err, p, ctx) {
     });
   }
 
-  var seek = debouncedSeeker(function(offset) {
+  var seekImmediate = function(offset) {
     if (ctx.options.disableSeek || offset === 0) return;
     var seconds = Math.max(0, (p.getPosition() / 1000) + offset);
     debug('seeking to %s', seconds);
     p.seek(seconds);
-  }, 500);
+  };
+
+  if (opts.exit) {
+    // cannot debounce or seek never executes before we exit
+    var seek = seekImmediate;
+  } else {
+    var seek = debouncedSeeker(function(offset) {
+      // handles seeking offset = seconds
+      seekImmediate(offset);
+    }, 500);
+  }
 
   var updateTitle = function() {
     p.getStatus(function(err, status) {
