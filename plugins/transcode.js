@@ -27,11 +27,12 @@ var transcode = function(ctx, next) {
     s.on('error', function(err) {
       debug('got error: %o', err);
     });
-
+    
     var trans = new Transcoder(s)
       .videoCodec('h264')
       .format('mp4')
       .custom('strict', 'experimental')
+      .custom('ss', ctx.options.seek)
       .on('finish', function() {
         debug('finished transcoding');
       })
