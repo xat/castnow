@@ -1,17 +1,21 @@
 # castnow
 
-castnow is a command-line utility that can be used to play back media files on
+Castnow is a command-line utility that can be used to play back media files on
 your Chromecast device. It supports playback of local video files, videos on the web and torrents.
 You can also re-attach a running playback session \(this sentence should belong somewhere else).
 
-### interested in being a castnow maintainer?
+### Interested in being a castnow maintainer?
 
 I currently don't have that much time to maintain this project and have also lost some interest (to be honest).
 Main reason is that we have had a new TV for a few months that supports casting directly to it using
 DLNA \(you may wanna checkout [dlnacast](https://github.com/xat/dlnacast)).
 Feel free to contact me \( [simon@sope.io](simon@sope.io) ) if you want to be added as a maintainer to castnow.
 
-### usage
+### Install
+
+`sudo npm install castnow -g`
+
+### Usage
 
 ```
 
@@ -49,7 +53,7 @@ castnow
 
 ```
 
-### options
+### Options
 
 * `--tomp4` Transcode a video file to mp4 during playback. This option requires
 ffmpeg to be installed on your computer. The play / pause controls are currently
@@ -97,7 +101,7 @@ contains subtitles.
 
 * `--help` Display help message.
 
-### player controls
+### Player Controls
 
 ```
 
@@ -114,7 +118,7 @@ q       // quit
 
 ```
 
-### YouTube support
+### YouTube Support
 
 We had to drop direct YouTube support for now since google changed the chromecast YouTube API.
 However, there is a nice workaround in combination with the tool [youtube-dl](https://github.com/rg3/youtube-dl):
@@ -123,9 +127,9 @@ However, there is a nice workaround in combination with the tool [youtube-dl](ht
 
 Thanks to [trulex](https://github.com/trulex) for pointing that out.
 
-### non-interactive use
+### Non-Interactive
 
-castnow can also be used in cron jobs or via window-manager bindings; for example:
+Castnow can also be used in cron jobs or via window-manager bindings; for example:
 
 ```
 // Play/pause.
@@ -135,7 +139,7 @@ castnow --command space --exit
 castnow --command up --exit
 ```
 
-#### usage via [screen](https://www.gnu.org/software/screen/) command
+#### Usage via [screen](https://www.gnu.org/software/screen/) command
 
 To avoid starting a new castnow command every time (which takes long time) you should use background sessions.
 
@@ -171,7 +175,6 @@ screen -S cast_session -X stuff 'n'
 // stop playback.
 screen -S cast_session -X stuff 's'
 
-
 // quit/stop session
 screen -S cast_session -X stuff 'q'
 // or
@@ -183,10 +186,6 @@ screen -S cast_session -X quit
 Please include the debug output in your issues. You can enable the debug messages by setting the
 DEBUG environment variable before running the castnow command like this: `DEBUG=castnow* castnow ./myvideo.mp4`.
 Some problems have already been addressed in our wiki https://github.com/xat/castnow/wiki.
-
-### installation
-
-`npm install castnow -g`
 
 ### contributors
 
