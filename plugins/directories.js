@@ -7,7 +7,8 @@ var debug = require('debug')('castnow:directories');
 
 var acceptedExtensions = {
   '.mp3': true,
-  '.mp4': true
+  '.mp4': true,
+  '.flac': true
 };
 
 function filter(filePath, dir) {
