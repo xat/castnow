@@ -5,6 +5,7 @@ var path = require('path');
 var serveMp4 = require('../utils/serve-mp4');
 var debug = require('debug')('castnow:localfile');
 var fs = require('fs');
+var mime = require('mime')
 
 var isFile = function(item) {
   return fs.existsSync(item.path) && fs.statSync(item.path).isFile();
@@ -30,7 +31,7 @@ var localfile = function(ctx, next) {
     if (!isFile(item)) return item;
     return {
       path: 'http://' + ip + ':' + port + '/' + idx,
-      type: 'video/mp4',
+      type: mime.lookup(item.path),
       media: {
         metadata: {
           filePath: item.path,
