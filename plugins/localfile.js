@@ -29,9 +29,12 @@ var localfile = function(ctx, next) {
 
   ctx.options.playlist = list.map(function(item, idx) {
     if (!isFile(item)) return item;
+    var mimeType = mime.lookup(item.path);
+    var type = mimeType.split('/')[0];
+    if (type !== 'audio' && type !== 'video') mimeType = 'video/mp4';
     return {
       path: 'http://' + ip + ':' + port + '/' + idx,
-      type: mime.lookup(item.path),
+      type: mimeType,
       media: {
         metadata: {
           filePath: item.path,
