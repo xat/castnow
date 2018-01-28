@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var player = require('chromecast-player')();
-var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
 var keypress = require('keypress');
 var ui = require('playerui')();
@@ -21,6 +20,12 @@ var torrent = require('./plugins/torrent');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 var stdin = require('./plugins/stdin');
+
+var optConfig = {
+  boolean: "tomp4 quiet bypass-srt-encoding loop shuffle recursive exit help".split(/\s+/),
+  string: "device address subtitles subtitle-scale subtitle-color subtitle-port myip type seek volume-step localfile-port transcode-port torrent-port stdin-port command".split(/\s+/)
+}
+var opts = require('minimist')(process.argv.slice(2), optConfig);
 
 if (opts.help) {
   return console.log([
