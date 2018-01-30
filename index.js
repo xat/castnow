@@ -11,6 +11,7 @@ var shuffle = require('array-shuffle');
 var unformatTime = require('./utils/unformat-time');
 var debug = require('debug')('castnow');
 var debouncedSeeker = require('debounced-seeker');
+var mime = require('mime');
 var noop = function() {};
 
 // plugins
@@ -397,6 +398,24 @@ player.use(xspf);
 player.use(localfile);
 player.use(transcode);
 player.use(subtitles);
+
+player.use(function(ctx, next) {
+  if (ctx.mode !== 'launch') return next();
+  if (ctx.options.type)
+    // If a --type has been provided, then respect it.
+    ctx.options.playlist.map(function(item) {item.type = ctx.options.type;});
+  else {
+    ctx.options.playlist.map(function(item){
+      if (!item.type) {
+        // These will be URLs (the MIME type for files is filled in by the localfile plugin).
+        var mimeType = mime.lookup(item.path);
+        var type = mimeType.split('/')[0];
+        if (type === 'audio' || type === 'video') item.type = mimeType;
+      }
+    });
+  }
+  next()
+});
 
 player.use(function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
