@@ -66,6 +66,7 @@ if (opts.help) {
     'down                     Volume Down',
     'left                     Seek backward',
     'right                    Seek forward',
+    'p                        Previous in playlist',
     'n                        Next in playlist',
     's                        Stop playback',
     'quit                     Quit',
@@ -133,6 +134,7 @@ var ctrl = function(err, p, ctx) {
   }
 
   var playlist = ctx.options.playlist;
+  var playlist_history = ctx.options.playlist_history;
   var volume;
   var is_keyboard_interactive = process.stdin.isTTY || false;
 
@@ -218,8 +220,24 @@ var ctrl = function(err, p, ctx) {
       debug('loading next in playlist: %o', playlist[0]);
       p.load(playlist[0], noop);
       var file = playlist.shift();
-      if (ctx.options.loop) playlist.push(file)
+      if (ctx.options.loop)
+        playlist.push(file);
+      else
+        playlist_history.push(file);
     });
+  };
+
+  var previousInPlaylist = function() {
+    if (ctx.options.loop) {
+      playlist.unshift(playlist.pop());
+      playlist.unshift(playlist.pop());
+      nextInPlaylist();
+    }
+    else if (0 < playlist_history.length) {
+      playlist.unshift(playlist_history.pop());
+      if (0 < playlist_history.length) playlist.unshift(playlist_history.pop());
+      nextInPlaylist();
+    }
   };
 
   p.on('status', last(function(status, memo) {
@@ -309,6 +327,11 @@ var ctrl = function(err, p, ctx) {
     // next item in playlist
     n: function() {
       nextInPlaylist();
+    },
+
+    // previous item in playlist
+    p: function() {
+      previousInPlaylist();
     },
 
     // stop playback
@@ -423,7 +446,10 @@ player.use(function(ctx, next) {
     ctx.options.playlist = shuffle(ctx.options.playlist);
   ctx.options = xtend(ctx.options, ctx.options.playlist[0]);
   var file = ctx.options.playlist.shift();
-  if (ctx.options.loop) ctx.options.playlist.push(file);
+  if (ctx.options.loop)
+    ctx.options.playlist.push(file);
+  else
+    ctx.options.playlist_history = [file];
   next();
 });
 
