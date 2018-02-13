@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+var fs = require('fs');
+var path = require('path');
 var player = require('chromecast-player')();
 var chalk = require('chalk');
 var keypress = require('keypress');
@@ -22,11 +24,18 @@ var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 var stdin = require('./plugins/stdin');
 
+var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+var rcOpts = [];
+try {
+  rcOpts = fs.readFileSync(path.join(home, '.castnowrc')).toString().trim().split(/\s+/);
+} catch(err) {}
+
 var optConfig = {
   boolean: "tomp4 quiet bypass-srt-encoding loop shuffle recursive exit help".split(/\s+/),
   string: "device address subtitles subtitle-scale subtitle-color subtitle-port myip type seek volume-step localfile-port transcode-port torrent-port stdin-port command".split(/\s+/)
 }
-var opts = require('minimist')(process.argv.slice(2), optConfig);
+var args = rcOpts.concat(process.argv.slice(2));
+var opts = require('minimist')(args, optConfig);
 
 if (opts.help) {
   return console.log([

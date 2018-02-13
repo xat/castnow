@@ -101,6 +101,14 @@ contains subtitles.
 
 * `--help` Display help message.
 
+Optionally, options can be preset by storing them in a file named `.castnowrc` in the current
+user's home directory.  For example:
+
+```
+--myip=192.168.1.8
+--volume-step=0.01
+```
+
 ### Player Controls
 
 ```
