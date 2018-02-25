@@ -37,6 +37,12 @@ var optConfig = {
 var args = rcOpts.concat(process.argv.slice(2));
 var opts = require('minimist')(args, optConfig);
 
+// Eliminate duplicate option values, prefering the final option value.
+for (var opt in opts) {
+  if (opts.hasOwnProperty(opt) && opt[0].toLowerCase() != opt[0].toUpperCase() && Array.isArray(opts[opt]))
+    opts[opt] = opts[opt].pop()
+}
+
 if (opts.help) {
   return console.log([
     '',
