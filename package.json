@@ -41,7 +41,7 @@
     "mime": "^1.2.11",
     "minimist": "^1.1.0",
     "peerflix": "^0.34.0",
-    "playerui": "^1.2.0",
+    "playerui": "^1.3.0",
     "query-string": "^1.0.0",
     "range-parser": "^1.0.2",
     "read-torrent": "^1.0.0",
