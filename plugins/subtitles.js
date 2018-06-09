@@ -95,7 +95,7 @@ var subtitles = function(ctx, next) {
     if (err) return next();
     debug('loading subtitles', ctx.options.subtitles);
     if (err) return next();
-    var ip = ctx.options.myip || internalIp();
+    var ip = ctx.options.myip || internalIp.v4.sync();
     var addr = 'http://' + ip + ':' + port;
     http.createServer(function(req, res) {
       debug('incoming request');

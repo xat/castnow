@@ -10,7 +10,7 @@ var transcode = function(ctx, next) {
   if (ctx.options.playlist.length > 1) return next();
   var orgPath = ctx.options.playlist[0].path;
   var port = ctx.options['transcode-port'] || 4103;
-  var ip = ctx.options.myip || internalIp();
+  var ip = ctx.options.myip || internalIp.v4.sync();
   ctx.options.playlist[0] = {
     path: 'http://' + ip + ':' + port,
     type: 'video/mp4'
