@@ -8,7 +8,8 @@ var fs = require('fs');
 var mime = require('mime')
 
 var isFile = function(item) {
-  return fs.existsSync(item.path) && fs.statSync(item.path).isFile();
+  const stat = fs.statSync(item.path);
+  return fs.existsSync(item.path) && fsStat.isFile() && fsStat.size > 0;
 };
 
 var contains = function(arr, cb) {
