@@ -22,7 +22,7 @@ var torrent = function(ctx, next) {
     }
     if (!ctx.options['peerflix-port']) ctx.options['peerflix-port'] = port;
     var engine = peerflix(torrent, grabOpts(ctx.options, 'peerflix-'));
-    var ip = ctx.options.myip || internalIp();
+    var ip = ctx.options.myip || internalIp.v4.sync();
     engine.server.once('listening', function() {
       debug('started webserver on address %s using port %s', ip, engine.server.address().port);
       ctx.options.playlist[0] = {
