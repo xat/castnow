@@ -26,11 +26,17 @@ var findSubtitles = function(options) {
   var videoPath = options.playlist[0].media.metadata.filePath;
   var videoBaseName = path.basename(videoPath, path.extname(videoPath));
   var mediaFolder = path.dirname(videoPath);
-  var srtPath = path.join(mediaFolder, videoBaseName + '.srt');
+  var lookUpFiles = [];
 
-  if (fs.existsSync(srtPath)) {
-    debug('subtitles found in %s', srtPath);
-    return srtPath;
+  lookUpFiles.push(path.join(mediaFolder, videoBaseName + '.srt'));
+  lookUpFiles.push(path.join(mediaFolder, "Subs", videoBaseName + '.srt'));
+
+  for (var i = 0; i < lookUpFiles.length; ++i) {
+    var srtPath = lookUpFiles[i];
+    if (fs.existsSync(srtPath)) {
+      debug('subtitles found in %s', srtPath);
+      return srtPath;
+    }
   }
 
   return;
