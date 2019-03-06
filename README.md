@@ -12,6 +12,17 @@ DLNA \(you may wanna checkout [dlnacast](https://github.com/xat/dlnacast)).
 Feel free to contact me \( [simon@sope.io](simon@sope.io) ) if you want to be added as a maintainer to castnow.
 
 ### Install
+First you need to install **brew**, please follow your specific distro installation method here: https://github.com/Linuxbrew/brew#install
+
+then you need to install **node**:
+
+`brew install node`
+
+Finally you can install castnow:
+
+` npm install castnow -g`
+
+or, if you installed brew for all users: 
 
 `sudo npm install castnow -g`
 
