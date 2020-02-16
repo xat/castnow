@@ -227,7 +227,15 @@ var ctrl = function(err, p, ctx) {
   p.on('playing', updateTitle);
 
   if (!ctx.options.disableSeek && ctx.options.seek) {
-    p.once('playing', initialSeek);
+    p.getStatus(function(err, status){
+      if(status.playerState == 'PLAYING'){
+        debug("already playing, seeking now");
+        initialSeek();
+      }
+      else{
+        p.once('playing', initialSeek);
+      }
+    });
   }
 
   updateTitle();
