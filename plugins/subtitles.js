@@ -34,10 +34,23 @@ var findSubtitles = function(options) {
   }
 
   return;
-}
+};
+
+var isRemote = function(path) {
+  var url = new URL(path);
+  return ['http:', 'https:'].indexOf(url.protocol) !== -1;
+};
+
+var isExtension = function(path, extension) {
+  return path.substr(-4).toLowerCase() === '.' + extension;
+};
 
 var isSrt = function(path) {
-  return path.substr(-4).toLowerCase() === '.srt';
+  return isExtension(path, 'srt');
+};
+
+var isVtt = function(path) {
+  return isExtension(path, 'vtt');
 };
 
 var attachSubtitles = function(ctx) {
@@ -90,10 +103,16 @@ var subtitles = function(ctx, next) {
     }
   }
 
+  if (isVtt(ctx.options.subtitles) && isRemote(ctx.options.subtitles)) {
+    debug('attaching remote subtitles', ctx.options.subtitles);
+    attachSubtitles(ctx);
+    return next();
+  }
+
   var port = ctx.options['subtitle-port'] || 4101;
   srtToVtt(ctx.options, function(err, data) {
     if (err) return next();
-    debug('loading subtitles', ctx.options.subtitles);
+    debug('attaching local subtitles', ctx.options.subtitles);
     if (err) return next();
     var ip = ctx.options.myip || internalIp.v4.sync();
     var addr = 'http://' + ip + ':' + port;
