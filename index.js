@@ -7,7 +7,6 @@ var chalk = require('chalk');
 var keypress = require('keypress');
 var ui = require('playerui')();
 var circulate = require('array-loop');
-var xtend = require('xtend');
 var shuffle = require('array-shuffle');
 var unformatTime = require('./utils/unformat-time');
 var debug = require('debug')('castnow');
@@ -464,7 +463,7 @@ player.use(function(ctx, next) {
   if (ctx.mode !== 'launch') return next();
   if (ctx.options.shuffle)
     ctx.options.playlist = shuffle(ctx.options.playlist);
-  ctx.options = xtend(ctx.options, ctx.options.playlist[0]);
+  ctx.options = Object.assign({}, ctx.options, ctx.options.playlist[0]);
   var file = ctx.options.playlist.shift();
   if (ctx.options.loop)
     ctx.options.playlist.push(file);
