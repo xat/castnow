@@ -35,7 +35,7 @@
     "debounced-seeker": "^1.0.0",
     "debug": "^2.1.0",
     "diveSync": "^0.3.0",
-    "got": "^1.2.2",
+    "got": "^11.8.5",
     "internal-ip": "^3.0.1",
     "keypress": "^0.2.1",
     "mime": "^1.2.11",
